@@ -81,7 +81,7 @@ class TransparentWindow(Gtk.Window):
         Gtk.main_quit()
 
     def __exec_cmd(self, cmdline):
-        os.system(cmdline)
+        fn.os.system(cmdline)
 
 
 TransparentWindow()
