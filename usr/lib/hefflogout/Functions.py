@@ -30,5 +30,7 @@ def _get_logout():
         return "pkill xmonad"
     elif desktop in ("dwm", "/usr/share/xsessions/dwm"):
         return "pkill dwm"
+    elif desktop in ("xfce", "/usr/share/xsessions/xfce"):
+        return "xfce4-session-logout --logout"
 
     return None
