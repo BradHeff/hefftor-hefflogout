@@ -1,8 +1,7 @@
-from pathlib import Path
 import cairo
 import gi
-import os
 import GUI
+import Functions as fn
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
@@ -10,16 +9,11 @@ gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk, GdkPixbuf
 from gi.repository import Gdk
 
-home = os.path.expanduser("~")
-base_dir = os.path.dirname(os.path.realpath(__file__))
-here = Path(__file__).resolve()
-working_dir = ''.join([str(here.parents[2]), "/share/hefflogout/"])
-
 
 class TransparentWindow(Gtk.Window):
     cmd_shutdown = "systemctl poweroff"
     cmd_restart = "systemctl reboot"
-    cmd_suspend = "pmi action suspend"
+    cmd_suspend = "systemctl suspend"
     cmd_lock = "betterlockscreen -l dimblur"
     cmd_logout = "openbox --exit"
 
@@ -42,7 +36,7 @@ class TransparentWindow(Gtk.Window):
 
         self.fullscreen()
         self.set_app_paintable(True)
-        GUI.GUI(self, Gtk, GdkPixbuf, working_dir, os)
+        GUI.GUI(self, Gtk, GdkPixbuf, fn.working_dir, fn.os)
         self.show_all()
 
     def on_click(self, widget, event, data):
@@ -66,7 +60,8 @@ class TransparentWindow(Gtk.Window):
 
     def click_button(self, widget, data=None):
         if (data == 'L'):
-            self.__exec_cmd(self.cmd_logout)
+            command = fn._get_logout()
+            self.__exec_cmd(command)            
 
         elif (data == 'R'):
             self.__exec_cmd(self.cmd_restart)
