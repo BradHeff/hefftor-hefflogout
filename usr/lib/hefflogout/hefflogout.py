@@ -17,10 +17,9 @@ working_dir = ''.join([str(here.parents[2]), "/share/hefflogout/"])
 
 
 class TransparentWindow(Gtk.Window):
-    cmd_shutdown = "shutdown -h now"
-    cmd_restart = "reboot"
+    cmd_shutdown = "systemctl poweroff"
+    cmd_restart = "systemctl reboot"
     cmd_suspend = "pmi action suspend"
-    cmd_hibernate = "pmi action hibernate"
     cmd_lock = "betterlockscreen -l dimblur"
     cmd_logout = "openbox --exit"
 
