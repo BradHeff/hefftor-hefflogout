@@ -36,6 +36,8 @@ class TransparentWindow(Gtk.Window):
         visual = screen.get_rgba_visual()
         if visual and screen.is_composited():
             self.set_visual(visual)
+        
+        fn.get_config(self, Gdk, fn.config)
 
         self.fullscreen()
         self.set_app_paintable(True)
@@ -93,7 +95,7 @@ class TransparentWindow(Gtk.Window):
         self.__is_fullscreen = bool(ev.new_window_state & Gdk.WindowState.FULLSCREEN)
 
     def draw(self, widget, context):
-        context.set_source_rgba(0, 0, 0, 0.6)
+        context.set_source_rgba(self.r, self.g, self.b, self.opacity)
         context.set_operator(cairo.OPERATOR_SOURCE)
         context.paint()
         context.set_operator(cairo.OPERATOR_OVER)
