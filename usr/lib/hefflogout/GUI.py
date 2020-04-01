@@ -1,4 +1,8 @@
 
+# =====================================================
+#                  Author Brad Heffernan
+# =====================================================
+
 
 def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
     mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)

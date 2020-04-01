@@ -1,3 +1,7 @@
+# =====================================================
+#                  Author Brad Heffernan
+# =====================================================
+
 import cairo
 import gi
 import GUI
@@ -15,7 +19,6 @@ class TransparentWindow(Gtk.Window):
     cmd_restart = "systemctl reboot"
     cmd_suspend = "systemctl suspend"
     cmd_lock = "betterlockscreen -l dimblur"
-    cmd_logout = "openbox --exit"
 
     def __init__(self):
         Gtk.Window.__init__(self)
