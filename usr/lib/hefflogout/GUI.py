@@ -1,6 +1,6 @@
 
 
-def GUI(self, Gtk, GdkPixbuf, working_dir, os):
+def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
     mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     mainbox2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
     self.add(mainbox)
@@ -15,40 +15,65 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os):
 
     Esh = Gtk.EventBox()
     Esh.connect("button_press_event", self.on_click, "S")
+    Esh.connect("button-press-event", self.on_click)
+    Esh.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
+    Esh.connect("enter-notify-event", self.on_mouse_in, "S")  # 2
+    Esh.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
+    Esh.connect("leave-notify-event", self.on_mouse_out, "S")  # 2
+
     Er = Gtk.EventBox()
     Er.connect("button_press_event", self.on_click, "R")
+    Er.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
+    Er.connect("enter-notify-event", self.on_mouse_in, "R")  # 2
+    Er.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
+    Er.connect("leave-notify-event", self.on_mouse_out, "R")  # 2
+
     Es = Gtk.EventBox()
     Es.connect("button_press_event", self.on_click, "U")
+    Es.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
+    Es.connect("enter-notify-event", self.on_mouse_in, "U")  # 2
+    Es.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
+    Es.connect("leave-notify-event", self.on_mouse_out, "U")  # 2
+
     Elk = Gtk.EventBox()
     Elk.connect("button_press_event", self.on_click, "K")
+    Elk.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
+    Elk.connect("enter-notify-event", self.on_mouse_in, "K")  # 2
+    Elk.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
+    Elk.connect("leave-notify-event", self.on_mouse_out, "K")  # 2
+
     El = Gtk.EventBox()
     El.connect("button_press_event", self.on_click, "L")
+    El.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
+    El.connect("enter-notify-event", self.on_mouse_in, "L")  # 2
+    El.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
+    El.connect("leave-notify-event", self.on_mouse_out, "L")  # 2
 
     psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
         os.path.join(working_dir, 'shutdown.svg'), 64, 64)
-    imagesh = Gtk.Image().new_from_pixbuf(psh)
+    self.imagesh = Gtk.Image().new_from_pixbuf(psh)
 
     pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
         os.path.join(working_dir, 'restart.svg'), 64, 64)
-    imager = Gtk.Image().new_from_pixbuf(pr)
+    self.imager = Gtk.Image().new_from_pixbuf(pr)
 
     ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
         os.path.join(working_dir, 'suspend.svg'), 64, 64)
-    images = Gtk.Image().new_from_pixbuf(ps)
+    self.images = Gtk.Image().new_from_pixbuf(ps)
 
     plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
         os.path.join(working_dir, 'lock.svg'), 64, 64)
-    imagelk = Gtk.Image().new_from_pixbuf(plk)
+    self.imagelk = Gtk.Image().new_from_pixbuf(plk)
 
     plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
         os.path.join(working_dir, 'logout.svg'), 64, 64)
-    imagelo = Gtk.Image().new_from_pixbuf(plo)
+    self.imagelo = Gtk.Image().new_from_pixbuf(plo)
 
-    Esh.add(imagesh)
-    Er.add(imager)
-    Es.add(images)
-    Elk.add(imagelk)
-    El.add(imagelo)
+    Esh.add(self.imagesh)
+    Er.add(self.imager)
+    Es.add(self.images)
+    Elk.add(self.imagelk)
+    El.add(self.imagelo)
 
     lbl1 = Gtk.Label(label="Shutdown")
     lbl2 = Gtk.Label(label="Reboot")

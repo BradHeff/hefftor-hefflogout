@@ -7,7 +7,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
 
 from gi.repository import Gtk, GdkPixbuf
-from gi.repository import Gdk
+from gi.repository import Gdk, Gdk
 
 
 class TransparentWindow(Gtk.Window):
@@ -36,8 +36,52 @@ class TransparentWindow(Gtk.Window):
 
         self.fullscreen()
         self.set_app_paintable(True)
-        GUI.GUI(self, Gtk, GdkPixbuf, fn.working_dir, fn.os)
+        GUI.GUI(self, Gtk, GdkPixbuf, fn.working_dir, fn.os, Gdk)
         self.show_all()
+
+    def on_mouse_in(self, widget, event, data):
+        if data == "S":
+            psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'shutdown_blur.svg'), 64, 64)
+            self.imagesh.set_from_pixbuf(psh)
+        elif data == "R":
+            pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'restart_blur.svg'), 64, 64)
+            self.imager.set_from_pixbuf(pr)
+        elif data == "U":
+            ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'suspend_blur.svg'), 64, 64)
+            self.images.set_from_pixbuf(ps)
+        elif data == "K":
+            plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'lock_blur.svg'), 64, 64)
+            self.imagelk.set_from_pixbuf(plk)
+        elif data == "L":
+            plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'logout_blur.svg'), 64, 64)
+            self.imagelo.set_from_pixbuf(plo)
+
+    def on_mouse_out(self, widget, event, data):
+        if data == "S":
+            psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'shutdown.svg'), 64, 64)
+            self.imagesh.set_from_pixbuf(psh)
+        elif data == "R":
+            pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'restart.svg'), 64, 64)
+            self.imager.set_from_pixbuf(pr)
+        elif data == "U":
+            ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'suspend.svg'), 64, 64)
+            self.images.set_from_pixbuf(ps)
+        elif data == "K":
+            plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'lock.svg'), 64, 64)
+            self.imagelk.set_from_pixbuf(plk)
+        elif data == "L":
+            plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'logout.svg'), 64, 64)
+            self.imagelo.set_from_pixbuf(plo)
 
     def on_click(self, widget, event, data):
         self.click_button(widget, data)
