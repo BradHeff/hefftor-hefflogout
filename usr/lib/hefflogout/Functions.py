@@ -56,6 +56,7 @@ def get_config(self, Gdk, config):
         if self.parser.has_option("commands", "lock"):
             self.cmd_lock = self.parser.get("commands", "lock")
 
+
 def _get_logout():
     out = subprocess.run(["sh", "-c", "env | grep DESKTOP_SESSION"],
                          shell=False, stdout=subprocess.PIPE)
