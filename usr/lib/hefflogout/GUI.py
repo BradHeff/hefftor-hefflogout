@@ -9,11 +9,11 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     mainbox2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 
     lblbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-    
+
     lbl = Gtk.Label(label="")
 
     self.lbl_stat = Gtk.Label()
-    
+
     lblbox.pack_start(lbl, True, False, 0)
     lblbox.pack_start(self.lbl_stat, True, False, 0)
 
@@ -29,9 +29,9 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     vbox1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox3 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-    vbox4 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    # vbox4 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox5 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-    vbox6 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    # vbox6 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox7 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox8 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox9 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -142,11 +142,11 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
         pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
             os.path.join(fn.home, '.face'), 64, 64)
         self.imageu = Gtk.Image().new_from_pixbuf(pu)
-    except:
+    except:  # noqa
         pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
             os.path.join(fn.working_dir, '.face'), 64, 64)
         self.imageu = Gtk.Image().new_from_pixbuf(pu)
-    
+
     frame = Gtk.Frame()
     frame.add(self.imageu)
 
@@ -189,7 +189,7 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     hbox2.pack_start(vbox10, False, False, 0)
 
     buttonbox.pack_start(hbox2, True, False, 0)
-    
+
     vboxHead.pack_start(frame, False, False, 0)
     vboxHead.pack_start(lblUser, False, False, 0)
 
