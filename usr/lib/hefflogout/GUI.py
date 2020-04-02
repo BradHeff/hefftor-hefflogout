@@ -135,6 +135,7 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     # lbl6 = Gtk.Label(label="Cancel")
     lbl7 = Gtk.Label(label="Hibernate")
     self.lbl_stats = Gtk.Label()
+    self.lbl_stats.set_markup("<span size=\"large\"><b></b></span>")
     lblUser = Gtk.Label(label=fn.username)
 
     pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
@@ -149,7 +150,9 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     btnOK = Gtk.Button("OK")
     btnOK.set_size_request(140, 30)
     btnOK.set_css_name("button")
+    btnOK.connect("clicked", self.on_ok_clicked)
     btnCancel = Gtk.Button("Cancel")
+    btnCancel.connect("clicked", self.on_cancel_clicked)
     btnCancel.set_size_request(140, 30)
     btnCancel.set_css_name("button")
 

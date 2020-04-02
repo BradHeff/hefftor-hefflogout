@@ -7,6 +7,7 @@ import gi
 import GUI
 import Functions as fn
 import threading
+from time import sleep
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
@@ -22,6 +23,7 @@ class TransparentWindow(Gtk.Window):
     cmd_hibernate = "systemctl hibernate"
     cmd_lock = "betterlockscreen -l dimblur"
     wallpaper = ""
+    breaks = False
 
     def __init__(self):
         super(TransparentWindow, self).__init__(title="Arcolinux Logout")
@@ -58,6 +60,13 @@ class TransparentWindow(Gtk.Window):
         if not fn.os.path.isfile("/tmp/hefflogout.lock"):
             with open("/tmp/hefflogout.lock", "w") as f:
                 f.write("")
+
+    def on_cancel_clicked(self, widget):
+        fn.os.unlink("/tmp/hefflogout.lock")
+        Gtk.main_quit()
+
+    def on_ok_clicked(self, widget):
+        self.breaks = True
 
     def on_mouse_in(self, widget, event, data):
         if data == "S":
@@ -140,6 +149,23 @@ class TransparentWindow(Gtk.Window):
                 self.click_button(widget, key)
 
     def click_button(self, widget, data=None):
+        if not (data == 'Escape'):
+            t = threading.Thread(target=self.run_button, args=(data,))
+            t.daemon = True
+            t.start()
+        else:
+            fn.os.unlink("/tmp/hefflogout.lock")
+            Gtk.main_quit()
+
+    def run_button(self, data):
+        if not (data == 'K'):
+            for i in range(10, 0, -1):
+                if self.breaks:
+                    break
+
+                GLib.idle_add(self.lbl_stats.set_markup, "<span size=\"large\"><b>Are you sure? " + str(i) + " seconds</b></span>")
+                sleep(1)
+        GLib.idle_add(self.lbl_stats.set_markup, "<span size=\"large\"><b></b></span>")
         if (data == 'L'):
             command = fn._get_logout()
             fn.os.unlink("/tmp/hefflogout.lock")
@@ -171,12 +197,11 @@ class TransparentWindow(Gtk.Window):
                 if fn.os.path.isfile(self.wallpaper):
                     self.lbl_stat.set_markup("<span size=\"x-large\"><b>Caching lockscreen images for a faster locking next time</b></span>")  # noqa
                     t = threading.Thread(target=fn.cache_bl,
-                                        args=(self, GLib, Gtk,))
+                                         args=(self, GLib, Gtk,))
                     t.daemon = True
                     t.start()
                 else:
                     self.lbl_stat.set_markup("<span size=\"x-large\"><b>You need to set a wallpaper in the config file first</b></span>")  # noqa
-                    
             else:
                 fn.os.unlink("/tmp/hefflogout.lock")
                 self.__exec_cmd(self.cmd_lock)
