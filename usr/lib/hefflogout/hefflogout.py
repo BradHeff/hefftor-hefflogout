@@ -53,7 +53,7 @@ class TransparentWindow(Gtk.Window):
 
         self.fullscreen()
         self.set_app_paintable(True)
-        GUI.GUI(self, Gtk, GdkPixbuf, fn.working_dir, fn.os, Gdk)
+        GUI.GUI(self, Gtk, GdkPixbuf, fn.working_dir, fn.os, Gdk, fn)
 
         if not fn.os.path.isfile("/tmp/hefflogout.lock"):
             with open("/tmp/hefflogout.lock", "w") as f:
@@ -168,11 +168,15 @@ class TransparentWindow(Gtk.Window):
 
         elif (data == 'K'):
             if not fn.os.path.isdir(fn.home + "/.cache/i3lock"):
-                self.lbl_stat.set_markup("<span size=\"x-large\"><b>Caching lockscreen images for a faster locking next time</b></span>")  # noqa
-                t = threading.Thread(target=fn.cache_bl,
-                                     args=(self, GLib, Gtk,))
-                t.daemon = True
-                t.start()
+                if fn.os.path.isfile(self.wallpaper):
+                    self.lbl_stat.set_markup("<span size=\"x-large\"><b>Caching lockscreen images for a faster locking next time</b></span>")  # noqa
+                    t = threading.Thread(target=fn.cache_bl,
+                                        args=(self, GLib, Gtk,))
+                    t.daemon = True
+                    t.start()
+                else:
+                    self.lbl_stat.set_markup("<span size=\"x-large\"><b>You need to set a wallpaper in the config file first</b></span>")  # noqa
+                    
             else:
                 fn.os.unlink("/tmp/hefflogout.lock")
                 self.__exec_cmd(self.cmd_lock)
@@ -194,6 +198,14 @@ if __name__ == "__main__":
         with open("/tmp/hefflogout.pid", "w") as f:
             f.write(str(fn.os.getpid()))
             f.close()
+        style_provider = Gtk.CssProvider()
+        style_provider.load_from_path("hefflogout.css")
+
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(),
+            style_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
         w = TransparentWindow()
         w.show_all()
         Gtk.main()

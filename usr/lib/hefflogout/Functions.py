@@ -7,13 +7,15 @@ import subprocess
 import os
 from pathlib import Path
 import configparser
+import getpass
 
+username = getpass.getuser()
 home = os.path.expanduser("~")
 base_dir = os.path.dirname(os.path.realpath(__file__))
 # here = Path(__file__).resolve()
 working_dir = ''.join([str(Path(__file__).parents[2]), "/share/hefflogout/"])
-config = "/etc/hefflogout.conf"
-# config = ''.join([str(Path(__file__).parents[3]), "/etc/hefflogout.conf"])
+# config = "/etc/hefflogout.conf"
+config = ''.join([str(Path(__file__).parents[3]), "/etc/hefflogout.conf"])
 
 
 def cache_bl(self, GLib, Gtk):

@@ -4,7 +4,7 @@
 # =====================================================
 
 
-def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
+def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     mainbox2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 
@@ -23,6 +23,9 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
 
     self.add(overlayFrame)
 
+    vboxHead = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    hboxHead = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+
     vbox1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox3 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -30,8 +33,13 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
     vbox5 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox6 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     vbox7 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    vbox8 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    vbox9 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    vbox10 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
-    hbox1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=30)
+    hbox1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    hbox2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    buttonbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 
     Esh = Gtk.EventBox()
     Esh.connect("button_press_event", self.on_click, "S")
@@ -55,12 +63,12 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
     Es.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
     Es.connect("leave-notify-event", self.on_mouse_out, "U")  # 2
 
-    Elk = Gtk.EventBox()
-    Elk.connect("button_press_event", self.on_click, "K")
-    Elk.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
-    Elk.connect("enter-notify-event", self.on_mouse_in, "K")  # 2
-    Elk.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
-    Elk.connect("leave-notify-event", self.on_mouse_out, "K")  # 2
+    # Elk = Gtk.EventBox()
+    # Elk.connect("button_press_event", self.on_click, "K")
+    # Elk.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
+    # Elk.connect("enter-notify-event", self.on_mouse_in, "K")  # 2
+    # Elk.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
+    # Elk.connect("leave-notify-event", self.on_mouse_out, "K")  # 2
 
     El = Gtk.EventBox()
     El.connect("button_press_event", self.on_click, "L")
@@ -69,12 +77,12 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
     El.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
     El.connect("leave-notify-event", self.on_mouse_out, "L")  # 2
 
-    Ec = Gtk.EventBox()
-    Ec.connect("button_press_event", self.on_click, "Escape")
-    Ec.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
-    Ec.connect("enter-notify-event", self.on_mouse_in, "Escape")  # 2
-    Ec.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
-    Ec.connect("leave-notify-event", self.on_mouse_out, "Escape")  # 2
+    # Ec = Gtk.EventBox()
+    # Ec.connect("button_press_event", self.on_click, "Escape")
+    # Ec.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
+    # Ec.connect("enter-notify-event", self.on_mouse_in, "Escape")  # 2
+    # Ec.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
+    # Ec.connect("leave-notify-event", self.on_mouse_out, "Escape")  # 2
 
     Eh = Gtk.EventBox()
     Eh.connect("button_press_event", self.on_click, "H")
@@ -87,9 +95,9 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
         os.path.join(working_dir, 'shutdown.svg'), 64, 64)
     self.imagesh = Gtk.Image().new_from_pixbuf(psh)
 
-    pc = GdkPixbuf.Pixbuf().new_from_file_at_size(
-        os.path.join(working_dir, 'cancel.svg'), 64, 64)
-    self.imagec = Gtk.Image().new_from_pixbuf(pc)
+    # pc = GdkPixbuf.Pixbuf().new_from_file_at_size(
+    #     os.path.join(working_dir, 'cancel.svg'), 64, 64)
+    # self.imagec = Gtk.Image().new_from_pixbuf(pc)
 
     pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
         os.path.join(working_dir, 'restart.svg'), 64, 64)
@@ -99,9 +107,9 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
         os.path.join(working_dir, 'suspend.svg'), 64, 64)
     self.images = Gtk.Image().new_from_pixbuf(ps)
 
-    plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
-        os.path.join(working_dir, 'lock.svg'), 64, 64)
-    self.imagelk = Gtk.Image().new_from_pixbuf(plk)
+    # plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
+    #     os.path.join(working_dir, 'lock.svg'), 64, 64)
+    # self.imagelk = Gtk.Image().new_from_pixbuf(plk)
 
     plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
         os.path.join(working_dir, 'logout.svg'), 64, 64)
@@ -114,18 +122,36 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
     Esh.add(self.imagesh)
     Er.add(self.imager)
     Es.add(self.images)
-    Elk.add(self.imagelk)
+    # Elk.add(self.imagelk)
     El.add(self.imagelo)
-    Ec.add(self.imagec)
+    # Ec.add(self.imagec)
     Eh.add(self.imageh)
 
     lbl1 = Gtk.Label(label="Shutdown")
     lbl2 = Gtk.Label(label="Reboot")
     lbl3 = Gtk.Label(label="Suspend")
-    lbl4 = Gtk.Label(label="Lock")
+    # lbl4 = Gtk.Label(label="Lock")
     lbl5 = Gtk.Label(label="Logout")
-    lbl6 = Gtk.Label(label="Cancel")
+    # lbl6 = Gtk.Label(label="Cancel")
     lbl7 = Gtk.Label(label="Hibernate")
+    self.lbl_stats = Gtk.Label()
+    lblUser = Gtk.Label(label=fn.username)
+
+    pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
+        os.path.join(fn.home, '.face'), 64, 64)
+    imageu = Gtk.Image().new_from_pixbuf(pu)
+
+    frame = Gtk.Frame()
+    frame.set_css_name("frame")
+    frame.set_name("frame")
+    frame.add(imageu)
+
+    btnOK = Gtk.Button("OK")
+    btnOK.set_size_request(140, 30)
+    btnOK.set_css_name("button")
+    btnCancel = Gtk.Button("Cancel")
+    btnCancel.set_size_request(140, 30)
+    btnCancel.set_css_name("button")
 
     vbox1.pack_start(Esh, False, False, 0)
     vbox1.pack_start(lbl1, False, False, 0)
@@ -133,24 +159,42 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk):
     vbox2.pack_start(lbl2, False, False, 0)
     vbox3.pack_start(Es, False, False, 0)
     vbox3.pack_start(lbl3, False, False, 0)
-    vbox4.pack_start(Elk, False, False, 0)
-    vbox4.pack_start(lbl4, False, False, 0)
+    # vbox4.pack_start(Elk, False, False, 0)
+    # vbox4.pack_start(lbl4, False, False, 0)
     vbox5.pack_start(El, False, False, 0)
     vbox5.pack_start(lbl5, False, False, 0)
-    vbox6.pack_start(Ec, False, False, 0)
-    vbox6.pack_start(lbl6, False, False, 0)
+    # vbox6.pack_start(Ec, False, False, 0)
+    # vbox6.pack_start(lbl6, False, False, 0)
     vbox7.pack_start(Eh, False, False, 0)
     vbox7.pack_start(lbl7, False, False, 0)
 
-    hbox1.pack_start(vbox6, False, False, 30)
-    hbox1.pack_start(vbox1, False, False, 30)
-    hbox1.pack_start(vbox2, False, False, 30)
-    hbox1.pack_start(vbox3, False, False, 30)
-    hbox1.pack_start(vbox7, False, False, 30)
-    hbox1.pack_start(vbox4, False, False, 30)
-    hbox1.pack_start(vbox5, False, False, 30)
+    # hbox1.pack_start(vbox6, False, False, 10)
+    hbox1.pack_start(vbox1, False, False, 10)
+    hbox1.pack_start(vbox2, False, False, 10)
+    hbox1.pack_start(vbox3, False, False, 10)
+    hbox1.pack_start(vbox7, False, False, 10)
+    # hbox1.pack_start(vbox4, False, False, 10)
+    hbox1.pack_start(vbox5, False, False, 10)
 
-    mainbox2.pack_start(hbox1, True, False, 0)
+    vbox9.pack_start(btnOK, False, False, 0)
+    vbox10.pack_start(btnCancel, False, False, 0)
+
+    hbox2.pack_start(vbox9, False, False, 0)
+    hbox2.pack_start(vbox10, False, False, 0)
+
+    buttonbox.pack_start(hbox2, True, False, 0)
+    
+    vboxHead.pack_start(frame, False, False, 0)
+    vboxHead.pack_start(lblUser, False, False, 0)
+
+    hboxHead.pack_start(vboxHead, True, False, 0)
+
+    vbox8.pack_start(hboxHead, False, False, 20)
+    vbox8.pack_start(hbox1, False, False, 0)
+    vbox8.pack_start(self.lbl_stats, False, False, 10)
+    vbox8.pack_start(buttonbox, False, False, 20)
+
+    mainbox2.pack_start(vbox8, True, False, 0)
 
     mainbox.pack_start(mainbox2, True, False, 0)
     # mainbox.pack_start(overlayFrame, False, False, 50)
