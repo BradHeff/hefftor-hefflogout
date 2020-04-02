@@ -237,7 +237,7 @@ if __name__ == "__main__":
             f.write(str(fn.os.getpid()))
             f.close()
         style_provider = Gtk.CssProvider()
-        style_provider.load_from_path("hefflogout.css")
+        style_provider.load_from_path(fn.base_dir + "/hefflogout.css")
 
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(),
