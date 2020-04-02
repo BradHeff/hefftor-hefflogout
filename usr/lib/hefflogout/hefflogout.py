@@ -73,14 +73,17 @@ class TransparentWindow(Gtk.Window):
             psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'shutdown_blur.svg'), 64, 64)
             self.imagesh.set_from_pixbuf(psh)
+            self.lbl1.set_markup("<span foreground=\"white\">Shutdown</span>")
         elif data == "R":
             pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'restart_blur.svg'), 64, 64)
             self.imager.set_from_pixbuf(pr)
+            self.lbl2.set_markup("<span foreground=\"white\">Reboot</span>")
         elif data == "U":
             ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'suspend_blur.svg'), 64, 64)
             self.images.set_from_pixbuf(ps)
+            self.lbl3.set_markup("<span foreground=\"white\">Suspend</span>")
         elif data == "K":
             plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'lock_blur.svg'), 64, 64)
@@ -89,6 +92,7 @@ class TransparentWindow(Gtk.Window):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'logout_blur.svg'), 64, 64)
             self.imagelo.set_from_pixbuf(plo)
+            self.lbl5.set_markup("<span foreground=\"white\">Logout</span>")
         elif data == "Escape":
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'cancel_blur.svg'), 64, 64)
@@ -97,6 +101,7 @@ class TransparentWindow(Gtk.Window):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'hibernate_blur.svg'), 64, 64)
             self.imageh.set_from_pixbuf(plo)
+            self.lbl7.set_markup("<span foreground=\"white\">Hibernate</span>")
         event.window.set_cursor(Gdk.Cursor(Gdk.CursorType.HAND2))
 
     def on_mouse_out(self, widget, event, data):
@@ -104,14 +109,17 @@ class TransparentWindow(Gtk.Window):
             psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'shutdown.svg'), 64, 64)
             self.imagesh.set_from_pixbuf(psh)
+            self.lbl1.set_markup("<span>Shutdown</span>")
         elif data == "R":
             pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'restart.svg'), 64, 64)
             self.imager.set_from_pixbuf(pr)
+            self.lbl2.set_markup("<span>Reboot</span>")
         elif data == "U":
             ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'suspend.svg'), 64, 64)
             self.images.set_from_pixbuf(ps)
+            self.lbl3.set_markup("<span>Suspend</span>")
         elif data == "K":
             plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'lock.svg'), 64, 64)
@@ -120,6 +128,7 @@ class TransparentWindow(Gtk.Window):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'logout.svg'), 64, 64)
             self.imagelo.set_from_pixbuf(plo)
+            self.lbl5.set_markup("<span>Logout</span>")
         elif data == "Escape":
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'cancel.svg'), 64, 64)
@@ -128,6 +137,7 @@ class TransparentWindow(Gtk.Window):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'hibernate.svg'), 64, 64)
             self.imageh.set_from_pixbuf(plo)
+            self.lbl7.set_markup("<span>Hibernate</span>")
 
     def on_click(self, widget, event, data):
         self.click_button(widget, data)
@@ -163,9 +173,12 @@ class TransparentWindow(Gtk.Window):
                 if self.breaks:
                     break
 
-                GLib.idle_add(self.lbl_stats.set_markup, "<span size=\"large\"><b>Are you sure? " + str(i) + " seconds</b></span>")
+                GLib.idle_add(self.lbl_stats.set_markup,
+                              "<span foreground=\"white\">Are you sure? " +
+                              str(i) + " seconds</span>")
                 sleep(1)
-        GLib.idle_add(self.lbl_stats.set_markup, "<span size=\"large\"><b></b></span>")
+        GLib.idle_add(self.lbl_stats.set_markup,
+                      "<span size=\"large\"><b></b></span>")
         if (data == 'L'):
             command = fn._get_logout()
             fn.os.unlink("/tmp/hefflogout.lock")
@@ -195,13 +208,13 @@ class TransparentWindow(Gtk.Window):
         elif (data == 'K'):
             if not fn.os.path.isdir(fn.home + "/.cache/i3lock"):
                 if fn.os.path.isfile(self.wallpaper):
-                    self.lbl_stat.set_markup("<span size=\"x-large\"><b>Caching lockscreen images for a faster locking next time</b></span>")  # noqa
+                    self.lbl_stat.set_markup("<span  foreground=\"white\" size=\"large\"><b>Caching lockscreen images for a faster locking next time</b></span>")  # noqa
                     t = threading.Thread(target=fn.cache_bl,
                                          args=(self, GLib, Gtk,))
                     t.daemon = True
                     t.start()
                 else:
-                    self.lbl_stat.set_markup("<span size=\"x-large\"><b>You need to set a wallpaper in the config file first</b></span>")  # noqa
+                    self.lbl_stat.set_markup("<span foreground=\"white\" size=\"large\"><b>You need to set a wallpaper in the config file first</b></span>")  # noqa
             else:
                 fn.os.unlink("/tmp/hefflogout.lock")
                 self.__exec_cmd(self.cmd_lock)

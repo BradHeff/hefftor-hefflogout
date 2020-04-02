@@ -127,25 +127,28 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     # Ec.add(self.imagec)
     Eh.add(self.imageh)
 
-    lbl1 = Gtk.Label(label="Shutdown")
-    lbl2 = Gtk.Label(label="Reboot")
-    lbl3 = Gtk.Label(label="Suspend")
+    self.lbl1 = Gtk.Label(label="Shutdown")
+    self.lbl2 = Gtk.Label(label="Reboot")
+    self.lbl3 = Gtk.Label(label="Suspend")
     # lbl4 = Gtk.Label(label="Lock")
-    lbl5 = Gtk.Label(label="Logout")
+    self.lbl5 = Gtk.Label(label="Logout")
     # lbl6 = Gtk.Label(label="Cancel")
-    lbl7 = Gtk.Label(label="Hibernate")
+    self.lbl7 = Gtk.Label(label="Hibernate")
     self.lbl_stats = Gtk.Label()
     self.lbl_stats.set_markup("<span size=\"large\"><b></b></span>")
     lblUser = Gtk.Label(label=fn.username)
 
-    pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
-        os.path.join(fn.home, '.face'), 64, 64)
-    imageu = Gtk.Image().new_from_pixbuf(pu)
-
+    try:
+        pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
+            os.path.join(fn.home, '.face'), 64, 64)
+        self.imageu = Gtk.Image().new_from_pixbuf(pu)
+    except:
+        pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
+            os.path.join(fn.working_dir, '.face'), 64, 64)
+        self.imageu = Gtk.Image().new_from_pixbuf(pu)
+    
     frame = Gtk.Frame()
-    frame.set_css_name("frame")
-    frame.set_name("frame")
-    frame.add(imageu)
+    frame.add(self.imageu)
 
     btnOK = Gtk.Button("OK")
     btnOK.set_size_request(140, 30)
@@ -157,19 +160,19 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     btnCancel.set_css_name("button")
 
     vbox1.pack_start(Esh, False, False, 0)
-    vbox1.pack_start(lbl1, False, False, 0)
+    vbox1.pack_start(self.lbl1, False, False, 0)
     vbox2.pack_start(Er, False, False, 0)
-    vbox2.pack_start(lbl2, False, False, 0)
+    vbox2.pack_start(self.lbl2, False, False, 0)
     vbox3.pack_start(Es, False, False, 0)
-    vbox3.pack_start(lbl3, False, False, 0)
+    vbox3.pack_start(self.lbl3, False, False, 0)
     # vbox4.pack_start(Elk, False, False, 0)
     # vbox4.pack_start(lbl4, False, False, 0)
     vbox5.pack_start(El, False, False, 0)
-    vbox5.pack_start(lbl5, False, False, 0)
+    vbox5.pack_start(self.lbl5, False, False, 0)
     # vbox6.pack_start(Ec, False, False, 0)
     # vbox6.pack_start(lbl6, False, False, 0)
     vbox7.pack_start(Eh, False, False, 0)
-    vbox7.pack_start(lbl7, False, False, 0)
+    vbox7.pack_start(self.lbl7, False, False, 0)
 
     # hbox1.pack_start(vbox6, False, False, 10)
     hbox1.pack_start(vbox1, False, False, 10)
