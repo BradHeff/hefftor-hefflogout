@@ -8,6 +8,8 @@ import os
 from pathlib import Path
 import configparser
 import getpass
+from time import sleep
+import threading
 
 username = getpass.getuser()
 home = os.path.expanduser("~")
@@ -20,9 +22,14 @@ config = "/etc/hefflogout.conf"
 
 def cache_bl(self, GLib, Gtk):
     if os.path.isfile("/usr/bin/betterlockscreen"):
-        subprocess.run(["betterlockscreen", "-u",
-                        self.wallpaper],
-                       shell=False)
+        with subprocess.Popen(["betterlockscreen", "-u",
+                               self.wallpaper],
+                              shell=False,
+                              stdout=subprocess.PIPE) as f:
+            for line in f.stdout:
+                GLib.idle_add(self.lbl_stat.set_markup,
+                              "<span  foreground=\"white\" size=\"large\"><b>" + line.decode().strip() +"</b></span>")  # noqa
+
         GLib.idle_add(self.lbl_stat.set_text, "")
         os.unlink("/tmp/hefflogout.lock")
         os.system(self.cmd_lock)
@@ -78,6 +85,79 @@ def _get_logout():
     #     return "xfce4-session-logout --logout"
 
     return None
+
+
+def run_button(self, data, Gtk, GLib):
+
+    if not (data == 'K'):
+        for i in range(10, 0, -1):
+            if self.breaks:
+                break
+
+            GLib.idle_add(self.lbl_stats.set_markup,
+                          "<span foreground=\"white\">Are you sure? " +
+                          str(i) + " seconds</span>")
+            sleep(1)
+    GLib.idle_add(self.lbl_stats.set_markup,
+                  "<span size=\"large\"><b></b></span>")
+    if (data == 'L'):
+        command = _get_logout()
+        os.unlink("/tmp/hefflogout.lock")
+        os.system(command)
+        Gtk.main_quit()
+
+    elif (data == 'R'):
+        os.unlink("/tmp/hefflogout.lock")
+        os.system(self.cmd_restart)
+        Gtk.main_quit()
+
+    elif (data == 'S'):
+        os.unlink("/tmp/hefflogout.lock")
+        os.system(self.cmd_shutdown)
+        Gtk.main_quit()
+
+    elif (data == 'U'):
+        os.unlink("/tmp/hefflogout.lock")
+        os.system(self.cmd_suspend)
+        Gtk.main_quit()
+
+    elif (data == 'H'):
+        os.unlink("/tmp/hefflogout.lock")
+        os.system(self.cmd_hibernate)
+        Gtk.main_quit()
+
+    elif (data == 'K'):
+        if not os.path.isdir(home + "/.cache/i3lock"):
+            if os.path.isfile(self.wallpaper):
+                GLib.idle_add(toggle_buttons, self, False)
+                GLib.idle_add(self.lbl_stat.set_markup,
+                              "<span  foreground=\"white\" size=\"large\"><b>Caching lockscreen images for a faster locking next time</b></span>")  # noqa
+                GLib.idle_add(self.lbl_stats.set_markup,
+                              "<span foreground=\"white\">This will take a few seconds, please wait....</span>")
+                t = threading.Thread(target=cache_bl,
+                                     args=(self, GLib, Gtk,))
+                t.daemon = True
+                t.start()
+            else:
+                GLib.idle_add(self.lbl_stat.set_markup,
+                              "<span foreground=\"white\" size=\"large\"><b>You need to set a wallpaper in the config file first</b></span>")  # noqa
+        else:
+            os.unlink("/tmp/hefflogout.lock")
+            os.system(self.cmd_lock)
+            Gtk.main_quit()
+    else:
+        os.unlink("/tmp/hefflogout.lock")
+        Gtk.main_quit()
+
+
+def toggle_buttons(self, state):
+    self.btnOK.set_sensitive(state)
+    self.btnCancel.set_sensitive(state)
+    self.Esh.set_sensitive(state)
+    self.Er.set_sensitive(state)
+    self.Es.set_sensitive(state)
+    self.El.set_sensitive(state)
+    self.Eh.set_sensitive(state)
 
 
 def file_check(file):

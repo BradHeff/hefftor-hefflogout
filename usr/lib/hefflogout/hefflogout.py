@@ -7,7 +7,6 @@ import gi
 import GUI
 import Functions as fn
 import threading
-from time import sleep
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
@@ -66,6 +65,7 @@ class TransparentWindow(Gtk.Window):
         Gtk.main_quit()
 
     def on_ok_clicked(self, widget):
+        self.lbl_stats.set_markup("<span foreground=\"white\">Running ....</span>")
         self.breaks = True
 
     def on_mouse_in(self, widget, event, data):
@@ -160,71 +160,12 @@ class TransparentWindow(Gtk.Window):
 
     def click_button(self, widget, data=None):
         if not (data == 'Escape'):
-            t = threading.Thread(target=self.run_button, args=(data,))
+            t = threading.Thread(target=fn.run_button, args=(self, data, Gtk, GLib,))
             t.daemon = True
             t.start()
         else:
             fn.os.unlink("/tmp/hefflogout.lock")
             Gtk.main_quit()
-
-    def run_button(self, data):
-        if not (data == 'K'):
-            for i in range(10, 0, -1):
-                if self.breaks:
-                    break
-
-                GLib.idle_add(self.lbl_stats.set_markup,
-                              "<span foreground=\"white\">Are you sure? " +
-                              str(i) + " seconds</span>")
-                sleep(1)
-        GLib.idle_add(self.lbl_stats.set_markup,
-                      "<span size=\"large\"><b></b></span>")
-        if (data == 'L'):
-            command = fn._get_logout()
-            fn.os.unlink("/tmp/hefflogout.lock")
-            self.__exec_cmd(command)
-            Gtk.main_quit()
-
-        elif (data == 'R'):
-            fn.os.unlink("/tmp/hefflogout.lock")
-            self.__exec_cmd(self.cmd_restart)
-            Gtk.main_quit()
-
-        elif (data == 'S'):
-            fn.os.unlink("/tmp/hefflogout.lock")
-            self.__exec_cmd(self.cmd_shutdown)
-            Gtk.main_quit()
-
-        elif (data == 'U'):
-            fn.os.unlink("/tmp/hefflogout.lock")
-            self.__exec_cmd(self.cmd_suspend)
-            Gtk.main_quit()
-
-        elif (data == 'H'):
-            fn.os.unlink("/tmp/hefflogout.lock")
-            self.__exec_cmd(self.cmd_hibernate)
-            Gtk.main_quit()
-
-        elif (data == 'K'):
-            if not fn.os.path.isdir(fn.home + "/.cache/i3lock"):
-                if fn.os.path.isfile(self.wallpaper):
-                    self.lbl_stat.set_markup("<span  foreground=\"white\" size=\"large\"><b>Caching lockscreen images for a faster locking next time</b></span>")  # noqa
-                    t = threading.Thread(target=fn.cache_bl,
-                                         args=(self, GLib, Gtk,))
-                    t.daemon = True
-                    t.start()
-                else:
-                    self.lbl_stat.set_markup("<span foreground=\"white\" size=\"large\"><b>You need to set a wallpaper in the config file first</b></span>")  # noqa
-            else:
-                fn.os.unlink("/tmp/hefflogout.lock")
-                self.__exec_cmd(self.cmd_lock)
-                Gtk.main_quit()
-        else:
-            fn.os.unlink("/tmp/hefflogout.lock")
-            Gtk.main_quit()
-
-    def __exec_cmd(self, cmdline):
-        fn.os.system(cmdline)
 
     def on_close(self, widget, data):
         fn.os.unlink("/tmp/hefflogout.lock")
