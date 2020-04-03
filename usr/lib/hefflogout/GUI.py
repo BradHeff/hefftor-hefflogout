@@ -138,16 +138,17 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     self.lbl_stats.set_markup("<span size=\"large\"><b></b></span>")
     lblUser = Gtk.Label(label=fn.username)
 
-    try:
-        pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(fn.home, '.face'), 64, 64)
-        self.imageu = Gtk.Image().new_from_pixbuf(pu)
-    except:  # noqa
-        pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(fn.working_dir, '.face'), 64, 64)
-        self.imageu = Gtk.Image().new_from_pixbuf(pu)
-
+    # try:
+    #     pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
+    #         os.path.join(fn.home, 'Downloads/2019-12-25 09.18.48.jpg'), 64, 64)
+    #     self.imageu = Gtk.Image().new_from_pixbuf(pu)
+    # except:  # noqa
+    #     pu = GdkPixbuf.Pixbuf().new_from_file_at_size(
+    #         os.path.join(fn.working_dir, '.face'), 64, 64)
+    #     self.imageu = Gtk.Image().new_from_pixbuf(pu)
+    self.imageu = Gtk.Image()
     frame = Gtk.Frame()
+    frame.set_size_request(100, 100)
     frame.add(self.imageu)
 
     self.btnOK = Gtk.Button("OK")

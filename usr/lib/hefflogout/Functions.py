@@ -12,7 +12,7 @@ from time import sleep
 import threading
 import gi
 gi.require_version('GdkPixbuf', '2.0')
-from gi.repository import GdkPixbuf
+from gi.repository import GdkPixbuf  # noqa
 
 username = getpass.getuser()
 home = os.path.expanduser("~")

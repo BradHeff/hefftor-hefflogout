@@ -10,9 +10,8 @@ import threading
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
-gi.require_version('Wnck', '3.0')
 
-from gi.repository import Gtk, GdkPixbuf, Gdk, Wnck, GLib, GdkX11  # noqa
+from gi.repository import Gtk, GdkPixbuf, Gdk, GLib, Gio  # noqa
 
 
 class TransparentWindow(Gtk.Window):
@@ -27,7 +26,7 @@ class TransparentWindow(Gtk.Window):
 
     def __init__(self):
         super(TransparentWindow, self).__init__(title="Arcolinux Logout")
-        self.set_size_request(300, 220)
+        self.set_size_request(800, 600)
         self.monitor = 0
         self.connect('delete-event', self.on_close)
         self.connect('draw', self.draw)
@@ -57,7 +56,7 @@ class TransparentWindow(Gtk.Window):
         self.set_app_paintable(True)
         GUI.GUI(self, Gtk, GdkPixbuf, fn.working_dir, fn.os, Gdk, fn)
 
-        if not fn.os.path.isfile("/tmp/hefflogout.lock"):
+        if not fn.file_check("/tmp/hefflogout.lock"):
             with open("/tmp/hefflogout.lock", "w") as f:
                 f.write("")
 
@@ -66,7 +65,7 @@ class TransparentWindow(Gtk.Window):
         Gtk.main_quit()
 
     def on_ok_clicked(self, widget):
-        self.lbl_stats.set_markup("<span foreground=\"white\">Running ....</span>")
+        self.lbl_stats.set_markup("<span foreground=\"white\">Running ....</span>")  # noqa
         self.breaks = True
 
     def on_mouse_in(self, widget, event, data):
@@ -164,7 +163,8 @@ class TransparentWindow(Gtk.Window):
     def click_button(self, widget, data=None):
         if not (data == 'Escape'):
             self.btnOK.set_sensitive(True)
-            t = threading.Thread(target=fn.run_button, args=(self, data, Gtk, GLib,))
+            t = threading.Thread(target=fn.run_button,
+                                 args=(self, data, Gtk, GLib,))
             t.daemon = True
             t.start()
         else:
@@ -177,10 +177,17 @@ class TransparentWindow(Gtk.Window):
 
 
 if __name__ == "__main__":
-    if not fn.os.path.isfile("/tmp/hefflogout.lock"):
+    if not fn.file_check("/tmp/hefflogout.lock"):
         with open("/tmp/hefflogout.pid", "w") as f:
             f.write(str(fn.os.getpid()))
             f.close()
+
+        if not fn.file_check("/tmp/logo.png"):
+            file = fn.home + "/.face"
+            if not fn.file_check(file):
+                file = fn.working_dir + "logo.png"
+            fn.subprocess.run(["cp", file, "/tmp/logo.png"])
+
         style_provider = Gtk.CssProvider()
         style_provider.load_from_path(fn.base_dir + "/hefflogout.css")
 

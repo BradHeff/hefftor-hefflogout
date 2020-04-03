@@ -1,8 +1,11 @@
+
 frame * {
     border-radius: 50%;
     border-width: 2px;
     padding: 3px;
     border-color: white;
+    background-image: url("/tmp/logo.png");
+    background-size: cover;
 }
 
 button {
