@@ -19,8 +19,8 @@ home = os.path.expanduser("~")
 base_dir = os.path.dirname(os.path.realpath(__file__))
 # here = Path(__file__).resolve()
 working_dir = ''.join([str(Path(__file__).parents[2]), "/share/hefflogout/"])
-config = "/etc/hefflogout.conf"
-# config = ''.join([str(Path(__file__).parents[3]), "/etc/hefflogout.conf"])
+# config = "/etc/hefflogout.conf"
+config = ''.join([str(Path(__file__).parents[3]), "/etc/hefflogout.conf"])
 
 
 def cache_bl(self, GLib, Gtk):
@@ -58,6 +58,14 @@ def get_config(self, Gdk, config):
     if self.parser.has_section("commands"):
         if self.parser.has_option("commands", "lock"):
             self.cmd_lock = self.parser.get("commands", "lock")
+
+    if self.parser.has_section("themes"):
+        if self.parser.has_option("themes", "theme"):
+            self.theme = self.parser.get("themes", "theme")
+            if self.theme == 'alternative':
+                self.theme = "_themed"
+            else:
+                self.theme = ""
 
 
 def _get_logout():
@@ -176,39 +184,39 @@ def toggle_icons(self, data):
     if data == "S":
         self.Esh.set_sensitive(True)
         psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'shutdown_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'shutdown_blur' + self.theme + '.svg'), 64, 64)
         self.imagesh.set_from_pixbuf(psh)
         self.lbl1.set_markup("<span foreground=\"white\">Shutdown</span>")
     elif data == "R":
         self.Er.set_sensitive(True)
         pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'restart_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'restart_blur' + self.theme + '.svg'), 64, 64)
         self.imager.set_from_pixbuf(pr)
         self.lbl2.set_markup("<span foreground=\"white\">Reboot</span>")
     elif data == "U":
         self.Es.set_sensitive(True)
         ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'suspend_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'suspend_blur' + self.theme + '.svg'), 64, 64)
         self.images.set_from_pixbuf(ps)
         self.lbl3.set_markup("<span foreground=\"white\">Suspend</span>")
     elif data == "K":
         plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'lock_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'lock_blur' + self.theme + '.svg'), 64, 64)
         self.imagelk.set_from_pixbuf(plk)
     elif data == "L":
         self.El.set_sensitive(True)
         plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'logout_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'logout_blur' + self.theme + '.svg'), 64, 64)
         self.imagelo.set_from_pixbuf(plo)
         self.lbl5.set_markup("<span foreground=\"white\">Logout</span>")
     elif data == "Escape":
         plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'cancel_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'cancel_blur' + self.theme + '.svg'), 64, 64)
         self.imagec.set_from_pixbuf(plo)
     elif data == "H":
         self.Eh.set_sensitive(True)
         plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'hibernate_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'hibernate_blur' + self.theme + '.svg'), 64, 64)
         self.imageh.set_from_pixbuf(plo)
         self.lbl7.set_markup("<span foreground=\"white\">Hibernate</span>")
 
