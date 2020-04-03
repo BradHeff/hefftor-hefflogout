@@ -10,6 +10,9 @@ import configparser
 import getpass
 from time import sleep
 import threading
+import gi
+gi.require_version('GdkPixbuf', '2.0')
+from gi.repository import GdkPixbuf
 
 username = getpass.getuser()
 home = os.path.expanduser("~")
@@ -91,6 +94,7 @@ def _get_logout():
 def run_button(self, data, Gtk, GLib):
 
     if not (data == 'K'):
+        GLib.idle_add(toggle_icons, self, data)
         for i in range(10, 0, -1):
             if self.breaks:
                 break
@@ -159,6 +163,54 @@ def toggle_buttons(self, state):
     self.Es.set_sensitive(state)
     self.El.set_sensitive(state)
     self.Eh.set_sensitive(state)
+
+
+def toggle_icons(self, data):
+    self.active = True
+    self.Esh.set_sensitive(False)
+    self.Er.set_sensitive(False)
+    self.Es.set_sensitive(False)
+    self.El.set_sensitive(False)
+    self.Eh.set_sensitive(False)
+
+    if data == "S":
+        self.Esh.set_sensitive(True)
+        psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
+            os.path.join(working_dir, 'shutdown_blur.svg'), 64, 64)
+        self.imagesh.set_from_pixbuf(psh)
+        self.lbl1.set_markup("<span foreground=\"white\">Shutdown</span>")
+    elif data == "R":
+        self.Er.set_sensitive(True)
+        pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
+            os.path.join(working_dir, 'restart_blur.svg'), 64, 64)
+        self.imager.set_from_pixbuf(pr)
+        self.lbl2.set_markup("<span foreground=\"white\">Reboot</span>")
+    elif data == "U":
+        self.Es.set_sensitive(True)
+        ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
+            os.path.join(working_dir, 'suspend_blur.svg'), 64, 64)
+        self.images.set_from_pixbuf(ps)
+        self.lbl3.set_markup("<span foreground=\"white\">Suspend</span>")
+    elif data == "K":
+        plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
+            os.path.join(working_dir, 'lock_blur.svg'), 64, 64)
+        self.imagelk.set_from_pixbuf(plk)
+    elif data == "L":
+        self.El.set_sensitive(True)
+        plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
+            os.path.join(working_dir, 'logout_blur.svg'), 64, 64)
+        self.imagelo.set_from_pixbuf(plo)
+        self.lbl5.set_markup("<span foreground=\"white\">Logout</span>")
+    elif data == "Escape":
+        plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
+            os.path.join(working_dir, 'cancel_blur.svg'), 64, 64)
+        self.imagec.set_from_pixbuf(plo)
+    elif data == "H":
+        self.Eh.set_sensitive(True)
+        plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
+            os.path.join(working_dir, 'hibernate_blur.svg'), 64, 64)
+        self.imageh.set_from_pixbuf(plo)
+        self.lbl7.set_markup("<span foreground=\"white\">Hibernate</span>")
 
 
 def file_check(file):
