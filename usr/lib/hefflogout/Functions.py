@@ -138,7 +138,7 @@ def run_button(self, data, Gtk, GLib):
                 GLib.idle_add(self.lbl_stat.set_markup,
                               "<span  foreground=\"white\" size=\"large\"><b>Caching lockscreen images for a faster locking next time</b></span>")  # noqa
                 GLib.idle_add(self.lbl_stats.set_markup,
-                              "<span foreground=\"white\">This will take a few seconds, please wait....</span>")
+                              "<span foreground=\"white\">This will take a few seconds, please wait....</span>")  # noqa
                 t = threading.Thread(target=cache_bl,
                                      args=(self, GLib, Gtk,))
                 t.daemon = True
