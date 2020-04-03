@@ -153,13 +153,14 @@ class TransparentWindow(Gtk.Window):
 
     def on_keypress(self, widget=None, event=None, data=None):
         self.shortcut_keys = ["Escape", "S", "R", "U", "L", "K", "H"]
-
+        self.btnOK.set_sensitive(True)
         for key in self.shortcut_keys:
             if event.keyval == Gdk.keyval_to_lower(Gdk.keyval_from_name(key)):
                 self.click_button(widget, key)
 
     def click_button(self, widget, data=None):
         if not (data == 'Escape'):
+            self.btnOK.set_sensitive(True)
             t = threading.Thread(target=fn.run_button, args=(self, data, Gtk, GLib,))
             t.daemon = True
             t.start()

@@ -154,6 +154,7 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     self.btnOK.set_size_request(140, 30)
     self.btnOK.set_css_name("button")
     self.btnOK.connect("clicked", self.on_ok_clicked)
+    self.btnOK.set_sensitive(False)
     self.btnCancel = Gtk.Button("Cancel")
     self.btnCancel.connect("clicked", self.on_cancel_clicked)
     self.btnCancel.set_size_request(140, 30)
