@@ -189,6 +189,8 @@ def toggle_icons(self, data):
     self.Es.set_sensitive(False)
     self.El.set_sensitive(False)
     self.Eh.set_sensitive(False)
+    self.Elk.set_sensitive(False)
+    self.Ec.set_sensitive(False)
 
     if data == "S":
         self.Esh.set_sensitive(True)
