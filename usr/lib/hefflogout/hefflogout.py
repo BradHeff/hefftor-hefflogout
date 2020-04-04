@@ -21,7 +21,7 @@ class TransparentWindow(Gtk.Window):
     cmd_hibernate = "systemctl hibernate"
     cmd_lock = "betterlockscreen -l dimblur"
     wallpaper = ""
-    theme = ""
+    theme = "standard"
     active = False
     breaks = False
 

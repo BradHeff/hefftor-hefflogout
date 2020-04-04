@@ -64,6 +64,8 @@ def get_config(self, Gdk, config, Gtk):
     if self.parser.has_section("themes"):
         if self.parser.has_option("themes", "theme"):
             self.theme = self.parser.get("themes", "theme")
+            if len(self.theme) < 1:
+                self.theme = "standard"
 
     if len(self.theme) > 1:
         style_provider = Gtk.CssProvider()
@@ -74,6 +76,7 @@ def get_config(self, Gdk, config, Gtk):
             style_provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
+
 
 def _get_logout():
     out = subprocess.run(["sh", "-c", "env | grep DESKTOP_SESSION"],
