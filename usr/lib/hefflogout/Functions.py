@@ -54,6 +54,8 @@ def get_config(self, Gdk, config, Gtk):
             self.opacity = int(self.parser.get("settings", "opacity"))/100
         if self.parser.has_option("settings", "lock_wallpaper"):
             self.wallpaper = self.parser.get("settings", "lock_wallpaper")
+        if self.parser.has_option("settings", "buttons"):
+            self.buttons = self.parser.get("settings", "buttons").split(",")
 
     if self.parser.has_section("commands"):
         if self.parser.has_option("commands", "lock"):
@@ -105,9 +107,8 @@ def _get_logout():
 
 
 def run_button(self, data, Gtk, GLib):
-
+    GLib.idle_add(toggle_icons, self, data)
     if not (data == 'K'):
-        GLib.idle_add(toggle_icons, self, data)
         for i in range(10, 0, -1):
             if self.breaks:
                 break
@@ -219,6 +220,7 @@ def toggle_icons(self, data):
         plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
             os.path.join(working_dir, 'themes/' + self.theme + '/cancel_blur.svg'), 64, 64)
         self.imagec.set_from_pixbuf(plo)
+        self.lbl6.set_markup("<span foreground=\"white\">Cancel</span>")
     elif data == "H":
         self.Eh.set_sensitive(True)
         plo = GdkPixbuf.Pixbuf().new_from_file_at_size(

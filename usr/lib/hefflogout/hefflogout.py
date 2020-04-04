@@ -52,6 +52,7 @@ class TransparentWindow(Gtk.Window):
             self.set_visual(visual)
 
         fn.get_config(self, Gdk, fn.config, Gtk)
+        # print(self.buttons)
 
         self.fullscreen()
         self.set_app_paintable(True)
@@ -99,6 +100,7 @@ class TransparentWindow(Gtk.Window):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/cancel_blur.svg'), 64, 64)
             self.imagec.set_from_pixbuf(plo)
+            self.lbl6.set_markup("<span foreground=\"white\">Cancel</span>")
         elif data == "H":
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate_blur.svg'), 64, 64)
@@ -137,6 +139,7 @@ class TransparentWindow(Gtk.Window):
                 plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                     fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/cancel.svg'), 64, 64)
                 self.imagec.set_from_pixbuf(plo)
+                self.lbl6.set_markup("<span>Cancel</span>")
             elif data == "H":
                 plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                     fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate.svg'), 64, 64)
