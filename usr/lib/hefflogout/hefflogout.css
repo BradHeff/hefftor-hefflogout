@@ -3,18 +3,6 @@ frame * {
     border-radius: 50%;
     border-width: 2px;
     padding: 3px;
-    border-color: white;
     background-image: url("/tmp/logo.png");
     background-size: cover;
-}
-
-button {
-    border-color: #282828;
-    border-radius: 2px;
-    background-color: #1d2025;
-}
-
-button:hover {
-    border-color: #2d3d57;
-    background-color: #2d3d57;
 }
