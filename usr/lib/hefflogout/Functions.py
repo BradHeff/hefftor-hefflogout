@@ -56,6 +56,8 @@ def get_config(self, Gdk, config, Gtk):
             self.wallpaper = self.parser.get("settings", "lock_wallpaper")
         if self.parser.has_option("settings", "buttons"):
             self.buttons = self.parser.get("settings", "buttons").split(",")
+        if self.parser.has_option("settings", "icon_size"):
+            self.icon = self.parser.get("settings", "icon_size")
 
     if self.parser.has_section("commands"):
         if self.parser.has_option("commands", "lock"):
@@ -66,6 +68,22 @@ def get_config(self, Gdk, config, Gtk):
             self.theme = self.parser.get("themes", "theme")
             if len(self.theme) < 1:
                 self.theme = "standard"
+
+    if self.parser.has_section("binds"):
+        if self.parser.has_option("binds", "shutdown"):
+            self.binds['shutdown'] = self.parser.get("binds", "shutdown").capitalize()
+        if self.parser.has_option("binds", "suspend"):
+            self.binds['suspend'] = self.parser.get("binds", "suspend").capitalize()
+        if self.parser.has_option("binds", "logout"):
+            self.binds['logout'] = self.parser.get("binds", "logout").capitalize()
+        if self.parser.has_option("binds", "restart"):
+            self.binds['restart'] = self.parser.get("binds", "restart").capitalize()
+        if self.parser.has_option("binds", "lock"):
+            self.binds['lock'] = self.parser.get("binds", "lock").capitalize()
+        if self.parser.has_option("binds", "hibernate"):
+            self.binds['hibernate'] = self.parser.get("binds", "hibernate").capitalize()
+        if self.parser.has_option("binds", "cancel"):
+            self.binds['cancel'] = self.parser.get("binds", "cancel").capitalize()
 
     if len(self.theme) > 1:
         style_provider = Gtk.CssProvider()
@@ -111,7 +129,7 @@ def _get_logout():
 
 def run_button(self, data, Gtk, GLib):
     GLib.idle_add(toggle_icons, self, data)
-    if not (data == 'K'):
+    if not (data == self.binds.get('lock')):
         for i in range(10, 0, -1):
             if self.breaks:
                 break
@@ -122,33 +140,33 @@ def run_button(self, data, Gtk, GLib):
             sleep(1)
     GLib.idle_add(self.lbl_stats.set_markup,
                   "<span size=\"large\"><b></b></span>")
-    if (data == 'L'):
+    if (data == self.binds.get('logout')):
         command = _get_logout()
         os.unlink("/tmp/hefflogout.lock")
-        os.system(command)
+        # os.system(command)
         Gtk.main_quit()
 
-    elif (data == 'R'):
+    elif (data == self.binds.get('restart')):
         os.unlink("/tmp/hefflogout.lock")
         os.system(self.cmd_restart)
         Gtk.main_quit()
 
-    elif (data == 'S'):
+    elif (data == self.binds.get('shutdown')):
         os.unlink("/tmp/hefflogout.lock")
         os.system(self.cmd_shutdown)
         Gtk.main_quit()
 
-    elif (data == 'U'):
+    elif (data == self.binds.get('suspend')):
         os.unlink("/tmp/hefflogout.lock")
         os.system(self.cmd_suspend)
         Gtk.main_quit()
 
-    elif (data == 'H'):
+    elif (data == self.binds.get('hibernate')):
         os.unlink("/tmp/hefflogout.lock")
         os.system(self.cmd_hibernate)
         Gtk.main_quit()
 
-    elif (data == 'K'):
+    elif (data == self.binds.get('lock')):
         if not os.path.isdir(home + "/.cache/i3lock"):
             if os.path.isfile(self.wallpaper):
                 GLib.idle_add(toggle_buttons, self, False)
@@ -192,44 +210,44 @@ def toggle_icons(self, data):
     self.Elk.set_sensitive(False)
     self.Ec.set_sensitive(False)
 
-    if data == "S":
+    if data == self.binds.get('shutdown'):
         self.Esh.set_sensitive(True)
         psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'themes/' + self.theme + '/shutdown_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'themes/' + self.theme + '/shutdown_blur.svg'), int(self.icon), int(self.icon))
         self.imagesh.set_from_pixbuf(psh)
         self.lbl1.set_markup("<span foreground=\"white\">Shutdown</span>")
-    elif data == "R":
+    elif data == self.binds.get('restart'):
         self.Er.set_sensitive(True)
         pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'themes/' + self.theme + '/restart_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'themes/' + self.theme + '/restart_blur.svg'), int(self.icon), int(self.icon))
         self.imager.set_from_pixbuf(pr)
         self.lbl2.set_markup("<span foreground=\"white\">Reboot</span>")
-    elif data == "U":
+    elif data == self.binds.get('suspend'):
         self.Es.set_sensitive(True)
         ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'themes/' + self.theme + '/suspend_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'themes/' + self.theme + '/suspend_blur.svg'), int(self.icon), int(self.icon))
         self.images.set_from_pixbuf(ps)
         self.lbl3.set_markup("<span foreground=\"white\">Suspend</span>")
-    elif data == "K":
+    elif data == self.binds.get('lock'):
         plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'themes/' + self.theme + '/lock_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'themes/' + self.theme + '/lock_blur.svg'), int(self.icon), int(self.icon))
         self.imagelk.set_from_pixbuf(plk)
         self.lbl4.set_markup("<span foreground=\"white\">Lock</span>")
-    elif data == "L":
+    elif data == self.binds.get('logout'):
         self.El.set_sensitive(True)
         plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'themes/' + self.theme + '/logout_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'themes/' + self.theme + '/logout_blur.svg'), int(self.icon), int(self.icon))
         self.imagelo.set_from_pixbuf(plo)
         self.lbl5.set_markup("<span foreground=\"white\">Logout</span>")
-    elif data == "Escape":
+    elif data == self.binds.get('cancel'):
         plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'themes/' + self.theme + '/cancel_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'themes/' + self.theme + '/cancel_blur.svg'), int(self.icon), int(self.icon))
         self.imagec.set_from_pixbuf(plo)
         self.lbl6.set_markup("<span foreground=\"white\">Cancel</span>")
-    elif data == "H":
+    elif data == self.binds.get('hibernate'):
         self.Eh.set_sensitive(True)
         plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-            os.path.join(working_dir, 'themes/' + self.theme + '/hibernate_blur.svg'), 64, 64)
+            os.path.join(working_dir, 'themes/' + self.theme + '/hibernate_blur.svg'), int(self.icon), int(self.icon))
         self.imageh.set_from_pixbuf(plo)
         self.lbl7.set_markup("<span foreground=\"white\">Hibernate</span>")
 

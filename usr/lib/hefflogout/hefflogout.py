@@ -21,6 +21,7 @@ class TransparentWindow(Gtk.Window):
     cmd_hibernate = "systemctl hibernate"
     cmd_lock = "betterlockscreen -l dimblur"
     wallpaper = ""
+    binds = {}
     theme = "standard"
     active = False
     breaks = False
@@ -52,7 +53,7 @@ class TransparentWindow(Gtk.Window):
             self.set_visual(visual)
 
         fn.get_config(self, Gdk, fn.config, Gtk)
-        # print(self.buttons)
+        # print(self.binds)
 
         self.fullscreen()
         self.set_app_paintable(True)
@@ -71,78 +72,78 @@ class TransparentWindow(Gtk.Window):
         self.breaks = True
 
     def on_mouse_in(self, widget, event, data):
-        if data == "S":
+        if data == self.binds.get('shutdown'):
             psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/shutdown_blur.svg'), 64, 64)
+                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/shutdown_blur.svg'), int(self.icon), int(self.icon))
             self.imagesh.set_from_pixbuf(psh)
             self.lbl1.set_markup("<span foreground=\"white\">Shutdown</span>")
-        elif data == "R":
+        elif data == self.binds.get('restart'):
             pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/restart_blur.svg'), 64, 64)
+                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/restart_blur.svg'), int(self.icon), int(self.icon))
             self.imager.set_from_pixbuf(pr)
             self.lbl2.set_markup("<span foreground=\"white\">Reboot</span>")
-        elif data == "U":
+        elif data == self.binds.get('suspend'):
             ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/suspend_blur.svg'), 64, 64)
+                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/suspend_blur.svg'), int(self.icon), int(self.icon))
             self.images.set_from_pixbuf(ps)
             self.lbl3.set_markup("<span foreground=\"white\">Suspend</span>")
-        elif data == "K":
+        elif data == self.binds.get('lock'):
             plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/lock_blur.svg'), 64, 64)
+                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/lock_blur.svg'), int(self.icon), int(self.icon))
             self.imagelk.set_from_pixbuf(plk)
             self.lbl4.set_markup("<span foreground=\"white\">Lock</span>")
-        elif data == "L":
+        elif data == self.binds.get('logout'):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/logout_blur.svg'), 64, 64)
+                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/logout_blur.svg'), int(self.icon), int(self.icon))
             self.imagelo.set_from_pixbuf(plo)
             self.lbl5.set_markup("<span foreground=\"white\">Logout</span>")
-        elif data == "Escape":
+        elif data == self.binds.get('cancel'):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/cancel_blur.svg'), 64, 64)
+                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/cancel_blur.svg'), int(self.icon), int(self.icon))
             self.imagec.set_from_pixbuf(plo)
             self.lbl6.set_markup("<span foreground=\"white\">Cancel</span>")
-        elif data == "H":
+        elif data == self.binds.get('hibernate'):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate_blur.svg'), 64, 64)
+                fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate_blur.svg'), int(self.icon), int(self.icon))
             self.imageh.set_from_pixbuf(plo)
             self.lbl7.set_markup("<span foreground=\"white\">Hibernate</span>")
         event.window.set_cursor(Gdk.Cursor(Gdk.CursorType.HAND2))
 
     def on_mouse_out(self, widget, event, data):
         if not self.active:
-            if data == "S":
+            if data == self.binds.get('shutdown'):
                 psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/shutdown.svg'), 64, 64)
+                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/shutdown.svg'), int(self.icon), int(self.icon))
                 self.imagesh.set_from_pixbuf(psh)
                 self.lbl1.set_markup("<span>Shutdown</span>")
-            elif data == "R":
+            elif data == self.binds.get('restart'):
                 pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/restart.svg'), 64, 64)
+                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/restart.svg'), int(self.icon), int(self.icon))
                 self.imager.set_from_pixbuf(pr)
                 self.lbl2.set_markup("<span>Reboot</span>")
-            elif data == "U":
+            elif data == self.binds.get('suspend'):
                 ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/suspend.svg'), 64, 64)
+                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/suspend.svg'), int(self.icon), int(self.icon))
                 self.images.set_from_pixbuf(ps)
                 self.lbl3.set_markup("<span>Suspend</span>")
-            elif data == "K":
+            elif data == self.binds.get('lock'):
                 plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/lock.svg'), 64, 64)
+                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/lock.svg'), int(self.icon), int(self.icon))
                 self.imagelk.set_from_pixbuf(plk)
                 self.lbl4.set_markup("<span>Lock</span>")
-            elif data == "L":
+            elif data == self.binds.get('logout'):
                 plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/logout.svg'), 64, 64)
+                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/logout.svg'), int(self.icon), int(self.icon))
                 self.imagelo.set_from_pixbuf(plo)
                 self.lbl5.set_markup("<span>Logout</span>")
-            elif data == "Escape":
+            elif data == self.binds.get('cancel'):
                 plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/cancel.svg'), 64, 64)
+                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/cancel.svg'), int(self.icon), int(self.icon))
                 self.imagec.set_from_pixbuf(plo)
                 self.lbl6.set_markup("<span>Cancel</span>")
-            elif data == "H":
+            elif data == self.binds.get('hibernate'):
                 plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
-                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate.svg'), 64, 64)
+                    fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate.svg'), int(self.icon), int(self.icon))
                 self.imageh.set_from_pixbuf(plo)
                 self.lbl7.set_markup("<span>Hibernate</span>")
 
@@ -160,14 +161,14 @@ class TransparentWindow(Gtk.Window):
         context.set_operator(cairo.OPERATOR_OVER)
 
     def on_keypress(self, widget=None, event=None, data=None):
-        self.shortcut_keys = ["Escape", "S", "R", "U", "L", "K", "H"]
+        self.shortcut_keys = [self.binds.get('cancel'), self.binds.get('shutdown'), "R", self.binds.get('suspend'), self.binds.get('logout'), self.binds.get('lock'), self.binds.get('hibernate')]
         self.btnOK.set_sensitive(True)
         for key in self.shortcut_keys:
             if event.keyval == Gdk.keyval_to_lower(Gdk.keyval_from_name(key)):
                 self.click_button(widget, key)
 
     def click_button(self, widget, data=None):
-        if not (data == 'Escape'):
+        if not (data == self.binds.get('cancel')):
             self.btnOK.set_sensitive(True)
             t = threading.Thread(target=fn.run_button,
                                  args=(self, data, Gtk, GLib,))
