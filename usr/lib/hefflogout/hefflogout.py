@@ -4,6 +4,7 @@
 
 import cairo
 import gi
+import shutil
 import GUI
 import Functions as fn
 import threading
@@ -37,6 +38,12 @@ class TransparentWindow(Gtk.Window):
         self.set_decorated(False)
         self.set_position(Gtk.WindowPosition.CENTER)
 
+        if not fn.os.path.isdir(fn.home + "/.config/hefflogout"):
+            fn.os.mkdir(fn.home + "/.config/hefflogout")
+
+        if not fn.os.path.isfile(fn.home + "/.config/hefflogout/hefflogout.conf"):
+            shutil.copy("/etc/hefflogout.conf", fn.home + "/.config/hefflogout/hefflogout.conf")
+
         screen = self.get_screen()
 
         screens = Gdk.Display.get_default()
@@ -62,6 +69,25 @@ class TransparentWindow(Gtk.Window):
         if not fn.file_check("/tmp/hefflogout.lock"):
             with open("/tmp/hefflogout.lock", "w") as f:
                 f.write("")
+
+    def on_save_clicked(self, widget):
+        with open(fn.config, "r") as f:
+            lines = f.readlines()
+            f.close()
+        
+        pos_opacity = fn._get_position(lines, "opacity")
+        pos_size = fn._get_position(lines, "icon_size")
+        pos_theme = fn._get_position(lines, "theme=")
+        pos_wall = fn._get_position(lines, "lock_wallpaper")
+
+        lines[pos_opacity] = "opacity=" + str(int(self.hscale.get_text())) + "\n"
+        lines[pos_size] = "icon_size=" + str(int(self.icons.get_text())) + "\n"
+        lines[pos_theme] = "theme=" + self.themes.get_text() + "\n"
+        lines[pos_wall] = "lock_wallpaper=" + self.wall.get_text() + "\n"
+
+        with open(fn.config, "w") as f:
+            f.writelines(lines)
+            f.close()
 
     def on_cancel_clicked(self, widget):
         fn.os.unlink("/tmp/hefflogout.lock")
@@ -107,6 +133,10 @@ class TransparentWindow(Gtk.Window):
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate_blur.svg'), int(self.icon), int(self.icon))
             self.imageh.set_from_pixbuf(plo)
             self.lbl7.set_markup("<span foreground=\"white\">Hibernate</span>")
+        elif data == 'settings':
+            pset = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                fn.os.path.join(fn.working_dir, 'configure_blur.svg'), 48, 48)
+            self.imageset.set_from_pixbuf(pset)
         event.window.set_cursor(Gdk.Cursor(Gdk.CursorType.HAND2))
 
     def on_mouse_out(self, widget, event, data):
@@ -146,9 +176,13 @@ class TransparentWindow(Gtk.Window):
                     fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate.svg'), int(self.icon), int(self.icon))
                 self.imageh.set_from_pixbuf(plo)
                 self.lbl7.set_markup("<span>Hibernate</span>")
+            elif data == 'settings':
+                pset = GdkPixbuf.Pixbuf().new_from_file_at_size(
+                    fn.os.path.join(fn.working_dir, 'configure.svg'), 48, 48)
+                self.imageset.set_from_pixbuf(pset)
 
     def on_click(self, widget, event, data):
-        if not self.active:
+        if not self.active or data == "settings":
             self.click_button(widget, data)
 
     def on_window_state_event(self, widget, ev):
@@ -168,15 +202,19 @@ class TransparentWindow(Gtk.Window):
                 self.click_button(widget, key)
 
     def click_button(self, widget, data=None):
-        if not (data == self.binds.get('cancel')):
+        if not (data == self.binds.get('cancel')) and not (data == 'settings'):
             self.btnOK.set_sensitive(True)
             t = threading.Thread(target=fn.run_button,
                                  args=(self, data, Gtk, GLib,))
             t.daemon = True
             t.start()
-        else:
+        elif data == self.binds.get('cancel'):
             fn.os.unlink("/tmp/hefflogout.lock")
             Gtk.main_quit()
+        else:
+            self.popover.set_relative_to(self.Eset)
+            self.popover.show_all()
+            self.popover.popup()
 
     def on_close(self, widget, data):
         fn.os.unlink("/tmp/hefflogout.lock")

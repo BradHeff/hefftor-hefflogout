@@ -20,7 +20,16 @@ base_dir = os.path.dirname(os.path.realpath(__file__))
 # here = Path(__file__).resolve()
 working_dir = ''.join([str(Path(__file__).parents[2]), "/share/hefflogout/"])
 # config = "/etc/hefflogout.conf"
-config = ''.join([str(Path(__file__).parents[3]), "/etc/hefflogout.conf"])
+if os.path.isfile(home + "/.config/hefflogout/hefflogout.conf"):
+    config = home + "/.config/hefflogout/hefflogout.conf"
+else:
+    config = ''.join([str(Path(__file__).parents[3]), "/etc/hefflogout.conf"])
+
+
+def _get_position(lists, value):
+    data = [string for string in lists if value in string]
+    position = lists.index(data[0])
+    return position
 
 
 def cache_bl(self, GLib, Gtk):

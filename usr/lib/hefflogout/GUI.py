@@ -7,6 +7,8 @@
 def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     mainbox2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    mainbox4 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    mainbox3 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
     lblbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
@@ -20,8 +22,21 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     overlayFrame = Gtk.Overlay()
     overlayFrame.add(lblbox)
     overlayFrame.add_overlay(mainbox)
-
+    
     self.add(overlayFrame)
+
+    self.Eset = Gtk.EventBox()
+    self.Eset.set_name("settings")
+    self.Eset.connect("button_press_event", self.on_click, 'settings')
+    self.Eset.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
+    self.Eset.connect("enter-notify-event", self.on_mouse_in, 'settings')  # 2
+    self.Eset.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
+    self.Eset.connect("leave-notify-event", self.on_mouse_out, 'settings')  # 2
+
+    pset = GdkPixbuf.Pixbuf().new_from_file_at_size(
+        os.path.join(working_dir, 'configure.svg'), 48, 48)
+    self.imageset = Gtk.Image().new_from_pixbuf(pset)
+    self.Eset.add(self.imageset)
 
     vboxHead = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     hboxHead = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
@@ -43,7 +58,6 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
 
     self.Esh = Gtk.EventBox()
     self.Esh.connect("button_press_event", self.on_click, self.binds.get('shutdown'))
-    self.Esh.connect("button-press-event", self.on_click)
     self.Esh.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
     self.Esh.connect("enter-notify-event", self.on_mouse_in, self.binds.get('shutdown'))  # 2
     self.Esh.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
@@ -207,5 +221,79 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
 
     mainbox2.pack_start(vbox8, True, False, 0)
 
+    mainbox3.pack_start(self.Eset, False, False, 0)
+    mainbox4.pack_end(mainbox3, False, False, 0)
+    mainbox.pack_start(mainbox4, False, False, 0)
     mainbox.pack_start(mainbox2, True, False, 0)
     # mainbox.pack_start(overlayFrame, False, False, 50)
+
+    self.popover = Gtk.Popover()
+    vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+    hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+    hbox3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+    hbox4 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+    hbox5 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+    hbox6 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+
+    lbl8 = Gtk.Label(label="Opacity:")
+    lbl9 = Gtk.Label(label="Icon size:")
+    lbl10 = Gtk.Label(label="Theme:")
+    lbl11 = Gtk.Label(label="Wallpaper:")
+    # try:
+    #     vals = self.opacity*100
+    #     ad1 = Gtk.Adjustment(vals, 0, 100, 5, 10, 0)
+    # except:
+    #     ad1 = Gtk.Adjustment(60, 0, 100, 5, 10, 0)
+
+    # self.hscale = Gtk.Scale(
+    #     orientation=Gtk.Orientation.HORIZONTAL, adjustment=ad1)
+    # self.hscale.set_digits(0)
+    # self.hscale.set_hexpand(True)
+    # self.hscale.set_size_request(150, 0)
+    # self.hscale.set_valign(Gtk.Align.START)
+    self.wall = Gtk.Entry()
+    self.wall.set_size_request(180, 0)
+    self.wall.set_width_chars(True)
+    self.wall.set_text(self.wallpaper)
+
+    self.hscale = Gtk.Entry()
+    self.hscale.set_size_request(80, 0)
+    self.hscale.set_width_chars(True)
+    self.hscale.set_text(str(int(self.opacity*100)))
+
+    self.icons = Gtk.Entry()
+    self.icons.set_size_request(80, 0)
+    self.icons.set_width_chars(True)
+    self.icons.set_text(self.icon)
+
+    self.themes = Gtk.Entry()
+    self.themes.set_size_request(180, 0)
+    self.themes.set_width_chars(True)
+    self.themes.set_text(self.theme)
+
+    btn = Gtk.Button(label="Save Settings")
+    btn.connect('clicked', self.on_save_clicked)
+
+    hbox3.pack_end(btn, False, False, 10)
+
+    hbox.pack_start(lbl8, False, False, 10)
+    hbox.pack_end(self.hscale, False, False, 10)
+
+    hbox4.pack_start(lbl9, False, False, 10)
+    hbox4.pack_end(self.icons, False, False, 10)
+
+    hbox5.pack_start(lbl10, False, False, 10)
+    hbox5.pack_end(self.themes, False, False, 10)
+    
+    hbox6.pack_start(lbl11, False, False, 10)
+    hbox6.pack_end(self.wall, False, False, 10)
+
+    vbox.pack_start(hbox, False, True, 10)
+    vbox.pack_start(hbox4, False, True, 10)
+    vbox.pack_start(hbox6, False, True, 10)
+    vbox.pack_start(hbox5, False, True, 10)
+    vbox.pack_end(hbox3, False, True, 10)
+    
+
+    self.popover.add(vbox)
+    self.popover.set_position(Gtk.PositionType.BOTTOM)
