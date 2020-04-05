@@ -71,10 +71,10 @@ class TransparentWindow(Gtk.Window):
                 f.write("")
 
     def on_save_clicked(self, widget):
-        with open(fn.config, "r") as f:
+        with open(fn.home + "/.config/hefflogout/hefflogout.conf", "r") as f:
             lines = f.readlines()
             f.close()
-        
+
         pos_opacity = fn._get_position(lines, "opacity")
         pos_size = fn._get_position(lines, "icon_size")
         pos_theme = fn._get_position(lines, "theme=")
@@ -85,9 +85,10 @@ class TransparentWindow(Gtk.Window):
         lines[pos_theme] = "theme=" + self.themes.get_text() + "\n"
         lines[pos_wall] = "lock_wallpaper=" + self.wall.get_text() + "\n"
 
-        with open(fn.config, "w") as f:
+        with open(fn.home + "/.config/hefflogout/hefflogout.conf", "w") as f:
             f.writelines(lines)
             f.close()
+        self.popover.popdown()
 
     def on_cancel_clicked(self, widget):
         fn.os.unlink("/tmp/hefflogout.lock")
