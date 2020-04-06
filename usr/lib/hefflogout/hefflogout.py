@@ -21,7 +21,14 @@ class TransparentWindow(Gtk.Window):
     cmd_suspend = "systemctl suspend"
     cmd_hibernate = "systemctl hibernate"
     cmd_lock = "betterlockscreen -l dimblur"
-    wallpaper = ""
+    frame_size = 100
+    wallpaper = "/usr/share/backgrounds/hefftorlinux/moon_landscape.png"
+    buttons = ["logout",
+               "restart",
+               "shutdown",
+               "suspend",
+               "hibernate",
+               "lock"]
     binds = {'shutdown': 'S',
              'suspend': 'U',
              'logout': 'L',
@@ -67,7 +74,7 @@ class TransparentWindow(Gtk.Window):
             self.set_visual(visual)
 
         fn.get_config(self, Gdk, fn.config, Gtk)
-        print(self.binds)
+        # print(self.binds)
 
         self.fullscreen()
         self.set_app_paintable(True)
@@ -81,20 +88,25 @@ class TransparentWindow(Gtk.Window):
         with open(fn.home + "/.config/hefflogout/hefflogout.conf", "r") as f:
             lines = f.readlines()
             f.close()
+        try:
+            pos_opacity = fn._get_position(lines, "opacity")
+            pos_size = fn._get_position(lines, "icon_size")
+            pos_frame_size = fn._get_position(lines, "frame_size")
+            pos_theme = fn._get_position(lines, "theme=")
+            pos_wall = fn._get_position(lines, "lock_wallpaper")
 
-        pos_opacity = fn._get_position(lines, "opacity")
-        pos_size = fn._get_position(lines, "icon_size")
-        pos_theme = fn._get_position(lines, "theme=")
-        pos_wall = fn._get_position(lines, "lock_wallpaper")
-
-        lines[pos_opacity] = "opacity=" + str(int(self.hscale.get_text())) + "\n"
-        lines[pos_size] = "icon_size=" + str(int(self.icons.get_text())) + "\n"
-        lines[pos_theme] = "theme=" + self.themes.get_active_text() + "\n"
-        lines[pos_wall] = "lock_wallpaper=" + self.wall.get_text() + "\n"
-
-        with open(fn.home + "/.config/hefflogout/hefflogout.conf", "w") as f:
-            f.writelines(lines)
-            f.close()
+            lines[pos_opacity] = "opacity=" + str(int(self.hscale.get_text())) + "\n"
+            lines[pos_size] = "icon_size=" + str(int(self.icons.get_text())) + "\n"
+            lines[pos_frame_size] = "frame_size=" + str(int(self.frames.get_text())) + "\n"
+            lines[pos_theme] = "theme=" + self.themes.get_active_text() + "\n"
+            lines[pos_wall] = "lock_wallpaper=" + self.wall.get_text() + "\n"
+            
+            with open(fn.home + "/.config/hefflogout/hefflogout.conf", "w") as f:
+                f.writelines(lines)
+                f.close()
+        except:
+            print("Your missing settings. Please delete the local config for the new config to be copied over.\n\
+or use meld to compare the global and local config to add new options.")
         self.popover.popdown()
 
     def on_cancel_clicked(self, widget):

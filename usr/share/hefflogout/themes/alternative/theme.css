@@ -2,6 +2,11 @@ frame * {
     border-color: #b2cfff;
 }
 
+label#userlbl {
+    font-size: 18px;
+    color: #b2cfff;
+}
+
 button {
     border-color: #282828;
     border-radius: 12px;

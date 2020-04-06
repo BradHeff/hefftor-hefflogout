@@ -39,6 +39,8 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     self.Eset.add(self.imageset)
 
     vboxHead = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    vboxHead2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    vboxHead3 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     hboxHead = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 
     vbox1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -151,11 +153,12 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     self.lbl7 = Gtk.Label(label="Hibernate")
     self.lbl_stats = Gtk.Label()
     self.lbl_stats.set_markup("<span size=\"large\"><b></b></span>")
-    lblUser = Gtk.Label(label=fn.username)
+    lblUser = Gtk.Label(label=fn.name)
+    lblUser.set_name("userlbl")
 
     self.imageu = Gtk.Image()
     frame = Gtk.Frame()
-    frame.set_size_request(100, 100)
+    frame.set_size_request(self.frame_size, self.frame_size)
     frame.add(self.imageu)
 
     self.btnOK = Gtk.Button("OK")
@@ -208,12 +211,14 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
 
     buttonbox.pack_start(hbox2, True, False, 0)
 
-    vboxHead.pack_start(frame, False, False, 0)
-    vboxHead.pack_start(lblUser, False, False, 0)
+    hboxHead.pack_start(frame, True, False, 0)
+    vboxHead2.pack_start(lblUser, False, False, 0)
 
-    hboxHead.pack_start(vboxHead, True, False, 0)
+    vboxHead3.pack_start(hboxHead, False, False, 0)
+    vboxHead3.pack_start(vboxHead2, False, False, 0)
+    vboxHead.pack_start(vboxHead3, True, False, 0)
 
-    vbox8.pack_start(hboxHead, False, False, 20)
+    vbox8.pack_start(vboxHead, False, False, 20)
     vbox8.pack_start(hbox1, False, False, 0)
     vbox8.pack_start(self.lbl_stats, False, False, 10)
     vbox8.pack_start(buttonbox, False, False, 20)
@@ -238,11 +243,13 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     hbox4 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
     hbox5 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
     hbox6 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+    hbox7 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
 
     lbl8 = Gtk.Label(label="Opacity:")
     lbl9 = Gtk.Label(label="Icon size:")
     lbl10 = Gtk.Label(label="Theme:")
     lbl11 = Gtk.Label(label="Wallpaper:")
+    lbl12 = Gtk.Label(label="Frame size:")
     # try:
     #     vals = self.opacity*100
     #     ad1 = Gtk.Adjustment(vals, 0, 100, 5, 10, 0)
@@ -268,7 +275,12 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     self.icons = Gtk.Entry()
     self.icons.set_size_request(80, 0)
     self.icons.set_width_chars(True)
-    self.icons.set_text(self.icon)
+    self.icons.set_text(str(self.icon))
+
+    self.frames = Gtk.Entry()
+    self.frames.set_size_request(80, 0)
+    self.frames.set_width_chars(True)
+    self.frames.set_text(str(self.frame_size))
 
     self.themes = Gtk.ComboBoxText()
     self.themes.set_size_request(180, 0)
@@ -297,8 +309,12 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     hbox6.pack_start(lbl11, False, False, 10)
     hbox6.pack_end(self.wall, False, False, 10)
 
+    hbox7.pack_start(lbl12, False, False, 10)
+    hbox7.pack_end(self.frames, False, False, 10)
+
     vbox.pack_start(hbox, False, True, 10)
     vbox.pack_start(hbox4, False, True, 10)
+    vbox.pack_start(hbox7, False, True, 10)
     vbox.pack_start(hbox6, False, True, 10)
     vbox.pack_start(hbox5, False, True, 10)
     vbox.pack_end(hbox3, False, True, 10)

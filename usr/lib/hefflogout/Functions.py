@@ -11,10 +11,12 @@ import getpass
 from time import sleep
 import threading
 import gi
+import pwd
 gi.require_version('GdkPixbuf', '2.0')
 from gi.repository import GdkPixbuf  # noqa
 
 username = getpass.getuser()
+name = pwd.getpwnam(username).pw_gecos
 home = os.path.expanduser("~")
 base_dir = os.path.dirname(os.path.realpath(__file__))
 # here = Path(__file__).resolve()
@@ -71,6 +73,8 @@ def get_config(self, Gdk, config, Gtk):
             self.buttons = self.parser.get("settings", "buttons").split(",")
         if self.parser.has_option("settings", "icon_size"):
             self.icon = self.parser.get("settings", "icon_size")
+        if self.parser.has_option("settings", "frame_size"):
+            self.frame_size = int(self.parser.get("settings", "frame_size"))
 
     if self.parser.has_section("commands"):
         if self.parser.has_option("commands", "lock"):
@@ -99,7 +103,7 @@ def get_config(self, Gdk, config, Gtk):
             self.binds['cancel'] = self.parser.get("binds", "cancel").capitalize()
         if self.parser.has_option("binds", "settings"):
             self.binds['settings'] = self.parser.get("binds", "settings").capitalize()
-
+        
     if len(self.theme) > 1:
         style_provider = Gtk.CssProvider()
         style_provider.load_from_path(working_dir + 'themes/' + self.theme + '/theme.css')
