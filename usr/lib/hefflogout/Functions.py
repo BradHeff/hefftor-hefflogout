@@ -162,7 +162,7 @@ def run_button(self, data, Gtk, GLib):
     if (data == self.binds.get('logout')):
         command = _get_logout()
         os.unlink("/tmp/hefflogout.lock")
-        # os.system(command)
+        os.system(command)
         Gtk.main_quit()
 
     elif (data == self.binds.get('restart')):
