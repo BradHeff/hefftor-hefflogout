@@ -22,7 +22,6 @@ class TransparentWindow(Gtk.Window):
     cmd_hibernate = "systemctl hibernate"
     cmd_lock = "betterlockscreen -l dimblur"
     frame_size = 100
-    wallpaper = "/usr/share/backgrounds/hefftorlinux/moon_landscape.png"
     buttons = ["logout",
                "restart",
                "shutdown",
@@ -93,14 +92,12 @@ class TransparentWindow(Gtk.Window):
             pos_size = fn._get_position(lines, "icon_size")
             pos_frame_size = fn._get_position(lines, "frame_size")
             pos_theme = fn._get_position(lines, "theme=")
-            pos_wall = fn._get_position(lines, "lock_wallpaper")
 
             lines[pos_opacity] = "opacity=" + str(int(self.hscale.get_text())) + "\n"
             lines[pos_size] = "icon_size=" + str(int(self.icons.get_text())) + "\n"
             lines[pos_frame_size] = "frame_size=" + str(int(self.frames.get_text())) + "\n"
             lines[pos_theme] = "theme=" + self.themes.get_active_text() + "\n"
-            lines[pos_wall] = "lock_wallpaper=" + self.wall.get_text() + "\n"
-            
+
             with open(fn.home + "/.config/hefflogout/hefflogout.conf", "w") as f:
                 f.writelines(lines)
                 f.close()
