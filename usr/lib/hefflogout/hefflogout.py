@@ -22,7 +22,14 @@ class TransparentWindow(Gtk.Window):
     cmd_hibernate = "systemctl hibernate"
     cmd_lock = "betterlockscreen -l dimblur"
     wallpaper = ""
-    binds = {}
+    binds = {'shutdown': 'S',
+             'suspend': 'U',
+             'logout': 'L',
+             'restart': 'R',
+             'lock': 'K',
+             'hibernate': 'H',
+             'cancel': 'Escape',
+             'settings': 'P'}
     theme = "standard"
     active = False
     breaks = False
@@ -60,7 +67,7 @@ class TransparentWindow(Gtk.Window):
             self.set_visual(visual)
 
         fn.get_config(self, Gdk, fn.config, Gtk)
-        # print(self.binds)
+        print(self.binds)
 
         self.fullscreen()
         self.set_app_paintable(True)
@@ -82,7 +89,7 @@ class TransparentWindow(Gtk.Window):
 
         lines[pos_opacity] = "opacity=" + str(int(self.hscale.get_text())) + "\n"
         lines[pos_size] = "icon_size=" + str(int(self.icons.get_text())) + "\n"
-        lines[pos_theme] = "theme=" + self.themes.get_text() + "\n"
+        lines[pos_theme] = "theme=" + self.themes.get_active_text() + "\n"
         lines[pos_wall] = "lock_wallpaper=" + self.wall.get_text() + "\n"
 
         with open(fn.home + "/.config/hefflogout/hefflogout.conf", "w") as f:
@@ -134,7 +141,7 @@ class TransparentWindow(Gtk.Window):
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate_blur.svg'), int(self.icon), int(self.icon))
             self.imageh.set_from_pixbuf(plo)
             self.lbl7.set_markup("<span foreground=\"white\">Hibernate</span>")
-        elif data == 'settings':
+        elif data == self.binds.get('settings'):
             pset = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'configure_blur.svg'), 48, 48)
             self.imageset.set_from_pixbuf(pset)
@@ -177,7 +184,7 @@ class TransparentWindow(Gtk.Window):
                     fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate.svg'), int(self.icon), int(self.icon))
                 self.imageh.set_from_pixbuf(plo)
                 self.lbl7.set_markup("<span>Hibernate</span>")
-            elif data == 'settings':
+            elif data == self.binds.get('settings'):
                 pset = GdkPixbuf.Pixbuf().new_from_file_at_size(
                     fn.os.path.join(fn.working_dir, 'configure.svg'), 48, 48)
                 self.imageset.set_from_pixbuf(pset)
@@ -196,14 +203,14 @@ class TransparentWindow(Gtk.Window):
         context.set_operator(cairo.OPERATOR_OVER)
 
     def on_keypress(self, widget=None, event=None, data=None):
-        self.shortcut_keys = [self.binds.get('cancel'), self.binds.get('shutdown'), "R", self.binds.get('suspend'), self.binds.get('logout'), self.binds.get('lock'), self.binds.get('hibernate')]
+        self.shortcut_keys = [self.binds.get('cancel'), self.binds.get('shutdown'), self.binds.get('restart'), self.binds.get('suspend'), self.binds.get('logout'), self.binds.get('lock'), self.binds.get('hibernate'), self.binds.get('settings')]
         self.btnOK.set_sensitive(True)
         for key in self.shortcut_keys:
             if event.keyval == Gdk.keyval_to_lower(Gdk.keyval_from_name(key)):
                 self.click_button(widget, key)
 
     def click_button(self, widget, data=None):
-        if not (data == self.binds.get('cancel')) and not (data == 'settings'):
+        if not (data == self.binds.get('cancel')) and not (data == self.binds.get('settings')):
             self.btnOK.set_sensitive(True)
             t = threading.Thread(target=fn.run_button,
                                  args=(self, data, Gtk, GLib,))
@@ -213,6 +220,7 @@ class TransparentWindow(Gtk.Window):
             fn.os.unlink("/tmp/hefflogout.lock")
             Gtk.main_quit()
         else:
+            self.themes.grab_focus()
             self.popover.set_relative_to(self.Eset)
             self.popover.show_all()
             self.popover.popup()

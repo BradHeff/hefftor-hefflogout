@@ -32,6 +32,10 @@ def _get_position(lists, value):
     return position
 
 
+def _get_themes():
+    return [x for x in os.listdir(working_dir + "themes")]
+
+
 def cache_bl(self, GLib, Gtk):
     if os.path.isfile("/usr/bin/betterlockscreen"):
         with subprocess.Popen(["betterlockscreen", "-u",
@@ -93,6 +97,8 @@ def get_config(self, Gdk, config, Gtk):
             self.binds['hibernate'] = self.parser.get("binds", "hibernate").capitalize()
         if self.parser.has_option("binds", "cancel"):
             self.binds['cancel'] = self.parser.get("binds", "cancel").capitalize()
+        if self.parser.has_option("binds", "settings"):
+            self.binds['settings'] = self.parser.get("binds", "settings").capitalize()
 
     if len(self.theme) > 1:
         style_provider = Gtk.CssProvider()

@@ -22,16 +22,16 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     overlayFrame = Gtk.Overlay()
     overlayFrame.add(lblbox)
     overlayFrame.add_overlay(mainbox)
-    
+
     self.add(overlayFrame)
 
     self.Eset = Gtk.EventBox()
     self.Eset.set_name("settings")
-    self.Eset.connect("button_press_event", self.on_click, 'settings')
+    self.Eset.connect("button_press_event", self.on_click, self.binds.get('settings'))
     self.Eset.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)  # 1
-    self.Eset.connect("enter-notify-event", self.on_mouse_in, 'settings')  # 2
+    self.Eset.connect("enter-notify-event", self.on_mouse_in, self.binds.get('settings'))  # 2
     self.Eset.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)  # 1
-    self.Eset.connect("leave-notify-event", self.on_mouse_out, 'settings')  # 2
+    self.Eset.connect("leave-notify-event", self.on_mouse_out, self.binds.get('settings'))  # 2
 
     pset = GdkPixbuf.Pixbuf().new_from_file_at_size(
         os.path.join(working_dir, 'configure.svg'), 48, 48)
@@ -142,7 +142,6 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
             self.imageh = Gtk.Image().new_from_pixbuf(ph)
             self.Eh.add(self.imageh)
 
-    
     self.lbl1 = Gtk.Label(label="Shutdown")
     self.lbl2 = Gtk.Label(label="Reboot")
     self.lbl3 = Gtk.Label(label="Suspend")
@@ -195,7 +194,7 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
         if x == "suspend":
             hbox1.pack_start(vbox3, False, False, 10)
         if x == "lock":
-            hbox1.pack_start(vbox4, False, False, 10)            
+            hbox1.pack_start(vbox4, False, False, 10)
         if x == "logout":
             hbox1.pack_start(vbox5, False, False, 10)
         if x == "hibernate":
@@ -223,7 +222,12 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
 
     mainbox3.pack_start(self.Eset, False, False, 0)
     mainbox4.pack_end(mainbox3, False, False, 0)
-    mainbox.pack_start(mainbox4, False, False, 0)
+
+    mainbox.pack_start(Gtk.Label(), False, False, 0)
+    mainbox.pack_start(Gtk.Label(), False, False, 0)
+
+    mainbox.pack_end(mainbox4, False, False, 0)
+
     mainbox.pack_start(mainbox2, True, False, 0)
     # mainbox.pack_start(overlayFrame, False, False, 50)
 
@@ -266,10 +270,15 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     self.icons.set_width_chars(True)
     self.icons.set_text(self.icon)
 
-    self.themes = Gtk.Entry()
+    self.themes = Gtk.ComboBoxText()
     self.themes.set_size_request(180, 0)
-    self.themes.set_width_chars(True)
-    self.themes.set_text(self.theme)
+    lists = fn._get_themes()
+    active = 0
+    for x in range(len(lists)):
+        self.themes.append_text(lists[x])
+        if lists[x] == self.theme:
+            active = x
+    self.themes.set_active(active)
 
     btn = Gtk.Button(label="Save Settings")
     btn.connect('clicked', self.on_save_clicked)
@@ -284,7 +293,7 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
 
     hbox5.pack_start(lbl10, False, False, 10)
     hbox5.pack_end(self.themes, False, False, 10)
-    
+
     hbox6.pack_start(lbl11, False, False, 10)
     hbox6.pack_end(self.wall, False, False, 10)
 
@@ -293,7 +302,6 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     vbox.pack_start(hbox6, False, True, 10)
     vbox.pack_start(hbox5, False, True, 10)
     vbox.pack_end(hbox3, False, True, 10)
-    
 
     self.popover.add(vbox)
     self.popover.set_position(Gtk.PositionType.BOTTOM)
