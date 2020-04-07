@@ -22,6 +22,7 @@ class TransparentWindow(Gtk.Window):
     cmd_hibernate = "systemctl hibernate"
     cmd_lock = "betterlockscreen -l dimblur"
     frame_size = 100
+    label = "#aabcda"
     buttons = ["logout",
                "restart",
                "shutdown",
@@ -119,37 +120,37 @@ or use meld to compare the global and local config to add new options.")
             psh = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/shutdown_blur.svg'), int(self.icon), int(self.icon))
             self.imagesh.set_from_pixbuf(psh)
-            self.lbl1.set_markup("<span foreground=\"white\">Shutdown</span>")
+            self.lbl1.set_markup("<span foreground=\"" + self.label + "\">Shutdown</span>")
         elif data == self.binds.get('restart'):
             pr = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/restart_blur.svg'), int(self.icon), int(self.icon))
             self.imager.set_from_pixbuf(pr)
-            self.lbl2.set_markup("<span foreground=\"white\">Reboot</span>")
+            self.lbl2.set_markup("<span foreground=\"" + self.label + "\">Reboot</span>")
         elif data == self.binds.get('suspend'):
             ps = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/suspend_blur.svg'), int(self.icon), int(self.icon))
             self.images.set_from_pixbuf(ps)
-            self.lbl3.set_markup("<span foreground=\"white\">Suspend</span>")
+            self.lbl3.set_markup("<span foreground=\"" + self.label + "\">Suspend</span>")
         elif data == self.binds.get('lock'):
             plk = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/lock_blur.svg'), int(self.icon), int(self.icon))
             self.imagelk.set_from_pixbuf(plk)
-            self.lbl4.set_markup("<span foreground=\"white\">Lock</span>")
+            self.lbl4.set_markup("<span foreground=\"" + self.label + "\">Lock</span>")
         elif data == self.binds.get('logout'):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/logout_blur.svg'), int(self.icon), int(self.icon))
             self.imagelo.set_from_pixbuf(plo)
-            self.lbl5.set_markup("<span foreground=\"white\">Logout</span>")
+            self.lbl5.set_markup("<span foreground=\"" + self.label + "\">Logout</span>")
         elif data == self.binds.get('cancel'):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/cancel_blur.svg'), int(self.icon), int(self.icon))
             self.imagec.set_from_pixbuf(plo)
-            self.lbl6.set_markup("<span foreground=\"white\">Cancel</span>")
+            self.lbl6.set_markup("<span foreground=\"" + self.label + "\">Cancel</span>")
         elif data == self.binds.get('hibernate'):
             plo = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'themes/' + self.theme + '/hibernate_blur.svg'), int(self.icon), int(self.icon))
             self.imageh.set_from_pixbuf(plo)
-            self.lbl7.set_markup("<span foreground=\"white\">Hibernate</span>")
+            self.lbl7.set_markup("<span foreground=\"" + self.label + "\">Hibernate</span>")
         elif data == self.binds.get('settings'):
             pset = GdkPixbuf.Pixbuf().new_from_file_at_size(
                 fn.os.path.join(fn.working_dir, 'configure_blur.svg'), 48, 48)

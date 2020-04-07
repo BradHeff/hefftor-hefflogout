@@ -7,6 +7,11 @@ label#userlbl {
     color: #9d8abe;
 }
 
+label#lbl {
+    font-size: 18px;
+    color: #aabcda;
+}
+
 button {
     border-color: #2c2538;
     border-radius: 12px;

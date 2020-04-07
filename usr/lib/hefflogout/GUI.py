@@ -151,6 +151,15 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     self.lbl5 = Gtk.Label(label="Logout")
     self.lbl6 = Gtk.Label(label="Cancel")
     self.lbl7 = Gtk.Label(label="Hibernate")
+    
+    self.lbl1.set_name("lbl")
+    self.lbl2.set_name("lbl")
+    self.lbl3.set_name("lbl")
+    self.lbl4.set_name("lbl")
+    self.lbl5.set_name("lbl")
+    self.lbl6.set_name("lbl")
+    self.lbl7.set_name("lbl")
+
     self.lbl_stats = Gtk.Label()
     self.lbl_stats.set_markup("<span size=\"large\"><b></b></span>")
     lblUser = Gtk.Label(label=fn.name)
@@ -242,24 +251,15 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     hbox3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
     hbox4 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
     hbox5 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+    hbox6 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
     hbox7 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
 
     lbl8 = Gtk.Label(label="Opacity:")
     lbl9 = Gtk.Label(label="Icon size:")
     lbl10 = Gtk.Label(label="Theme:")
+    lbl11 = Gtk.Label(label="Label color:")
     lbl12 = Gtk.Label(label="Frame size:")
-    # try:
-    #     vals = self.opacity*100
-    #     ad1 = Gtk.Adjustment(vals, 0, 100, 5, 10, 0)
-    # except:
-    #     ad1 = Gtk.Adjustment(60, 0, 100, 5, 10, 0)
-
-    # self.hscale = Gtk.Scale(
-    #     orientation=Gtk.Orientation.HORIZONTAL, adjustment=ad1)
-    # self.hscale.set_digits(0)
-    # self.hscale.set_hexpand(True)
-    # self.hscale.set_size_request(150, 0)
-    # self.hscale.set_valign(Gtk.Align.START)
+    
     self.hscale = Gtk.Entry()
     self.hscale.set_size_request(80, 0)
     self.hscale.set_width_chars(True)
@@ -269,6 +269,11 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     self.icons.set_size_request(80, 0)
     self.icons.set_width_chars(True)
     self.icons.set_text(str(self.icon))
+
+    self.labels = Gtk.Entry()
+    self.labels.set_size_request(80, 0)
+    self.labels.set_width_chars(True)
+    self.labels.set_text(str(self.label))
 
     self.frames = Gtk.Entry()
     self.frames.set_size_request(80, 0)
@@ -298,6 +303,9 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
 
     hbox5.pack_start(lbl10, False, False, 10)
     hbox5.pack_end(self.themes, False, False, 10)
+
+    hbox6.pack_start(lbl11, False, False, 10)
+    hbox6.pack_end(self.labels, False, False, 10)
 
     hbox7.pack_start(lbl12, False, False, 10)
     hbox7.pack_end(self.frames, False, False, 10)

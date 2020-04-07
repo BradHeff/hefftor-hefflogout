@@ -75,6 +75,8 @@ def get_config(self, Gdk, config, Gtk):
             self.icon = self.parser.get("settings", "icon_size")
         if self.parser.has_option("settings", "frame_size"):
             self.frame_size = int(self.parser.get("settings", "frame_size"))
+        if self.parser.has_option("settings", "label_color"):
+            self.label = self.parser.get("settings", "label_color")
 
     if self.parser.has_section("commands"):
         if self.parser.has_option("commands", "lock"):
