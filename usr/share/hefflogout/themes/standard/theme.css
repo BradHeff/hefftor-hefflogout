@@ -6,7 +6,10 @@ label#userlbl {
     font-size: 14px;
     color: #fff;
 }
-
+label#lbl {
+    font-size: 14px;
+    color: #aabcda;
+}
 button {
     border-color: #282828;
     border-radius: 2px;
