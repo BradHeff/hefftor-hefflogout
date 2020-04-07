@@ -257,9 +257,9 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     lbl8 = Gtk.Label(label="Opacity:")
     lbl9 = Gtk.Label(label="Icon size:")
     lbl10 = Gtk.Label(label="Theme:")
-    lbl11 = Gtk.Label(label="Label color:")
+    lbl11 = Gtk.Label(label="Label color(hover):")
     lbl12 = Gtk.Label(label="Frame size:")
-    
+
     self.hscale = Gtk.Entry()
     self.hscale.set_size_request(80, 0)
     self.hscale.set_width_chars(True)
@@ -313,6 +313,7 @@ def GUI(self, Gtk, GdkPixbuf, working_dir, os, Gdk, fn):
     vbox.pack_start(hbox, False, True, 10)
     vbox.pack_start(hbox4, False, True, 10)
     vbox.pack_start(hbox7, False, True, 10)
+    vbox.pack_start(hbox6, False, True, 10)
     vbox.pack_start(hbox5, False, True, 10)
     vbox.pack_end(hbox3, False, True, 10)
 
